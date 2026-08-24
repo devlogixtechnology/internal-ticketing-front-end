@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>All Tickets | TicketHub</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        rel="stylesheet">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link
+        rel="stylesheet"
+        href="styles.css">
+
+</head>
+
+<body>
+
+<div class="app">
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-mark">
+                T
+            </div>
+
+            <div>
+
+                <h5>
+                    TicketHub
+                </h5>
+
+                <small>
+                    Internal Ticketing
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="side-scroll">
+
+            <div class="section-label">
+                Workspace
+            </div>
+
+            <a
+                data-nav
+                href="index.html"
+                class="nav-itemx">
+
+                <div class="nav-left">
+
+                    <i class="fa-solid fa-grid-2"></i>
+
+                    <span>
+                        Dashboard
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <a
+                data-nav
+                href="tickets.html"
+                class="nav-itemx">
+
+                <div class="nav-left">
+
+                    <i class="fa-solid fa-ticket"></i>
+
+                    <span>
+                        Tickets
+                    </span>
+
+                </div>
+
+                <span class="count">
+                    24
+                </span>
+
+            </a>
+
+
+            <a
+                data-nav
+                href="projects.html"
+                class="nav-itemx">
+
+                <div class="nav-left">
+
+                    <i class="fa-solid fa-folder"></i>
+
+                    <span>
+                        Projects
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <a
+                data-nav
+                href="team.html"
+                class="nav-itemx">
+
+                <div class="nav-left">
+
+                    <i class="fa-solid fa-users"></i>
+
+                    <span>
+                        Team
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <div class="section-label mt-4">
+                Management
+            </div>
+
+            <a
+                data-nav
+                href="reports.html"
+                class="nav-itemx">
+
+                <div class="nav-left">
+
+                    <i class="fa-solid fa-chart-column"></i>
+
+                    <span>
+                        Reports
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <a
+                data-nav
+                href="activity.html"
+                class="nav-itemx">
+
+                <div class="nav-left">
+
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+
+                    <span>
+                        Activity
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <a
+                data-nav
+                href="settings.html"
+                class="nav-itemx">
+
+                <div class="nav-left">
+
+                    <i class="fa-solid fa-gear"></i>
+
+                    <span>
+                        Settings
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <div class="section-label mt-4">
+                Current Project
+            </div>
+
+            <div class="project-box">
+
+                <div class="project-row active">
+                    <i
+                        class="fa-solid fa-circle me-2"
+                        style="font-size:7px;color:#147f70">
+                    </i>
+
+                    Sprint 1 – Internal Hub
+                </div>
+
+                <div class="project-row">
+                    FE-01 Repo Setup & Architecture
+                </div>
+
+                <div class="project-row">
+                    FE-02 Mocking & API Contracts
+                </div>
+
+                <div class="project-row">
+                    FE-03 Ticket Dashboard View
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="user-box">
+
+            <div class="avatar">
+                SA
+            </div>
+
+            <div>
+
+                <strong>
+                    System Administrator
+                </strong>
+
+                <small>
+                    Administrator
+                </small>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <div class="main">
+
+        <header class="topbar">
+
+            <div class="page-mini">
+
+                <div class="mini-icon">
+
+                    <i class="fa-solid fa-ticket"></i>
+
+                </div>
+
+                <div>
+
+                    <h6>
+                        All Tickets
+                    </h6>
+
+                    <small>
+                        FE-03 · Internal Ticketing & Infrastructure Hub
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="top-actions">
+
+                <button class="icon-btn">
+                    <i class="fa-regular fa-envelope"></i>
+                </button>
+
+                <button class="icon-btn">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="dot"></span>
+                </button>
+
+                <button
+                    class="icon-btn"
+                    onclick="location.href='settings.html'">
+
+                    <i class="fa-solid fa-gear"></i>
+
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <main class="content">
+
+            <div class="heading-row">
+
+                <div>
+
+                    <div class="eyebrow">
+                        Workspace / Tickets
+                    </div>
+
+                    <h1>
+                        All Tickets
+                    </h1>
+
+                    <p>
+                        Search, filter and open any
+                        project ticket.
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="create-ticket.html"
+                    class="btn btn-teal">
+
+                    <i class="fa-solid fa-plus me-2"></i>
+
+                    Create New Ticket
+
+                </a>
+
+            </div>
+
+
+            <div class="cardx section-card mt-0">
+
+                <div class="filters">
+
+                    <div class="row g-2">
+
+                        <div class="col-lg-6">
+
+                            <input
+                                id="ticketSearch"
+                                class="form-control"
+                                placeholder="Search tickets by ID, title or description...">
+
+                        </div>
+
+
+                        <div class="col-lg-3">
+
+                            <select
+                                id="statusFilter"
+                                class="form-select">
+
+                                <option value="">
+                                    All Status
+                                </option>
+
+                                <option>
+                                    Open
+                                </option>
+
+                                <option>
+                                    In Progress
+                                </option>
+
+                                <option>
+                                    Code Review
+                                </option>
+
+                                <option>
+                                    Completed
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="col-lg-3">
+
+                            <select
+                                id="priorityFilter"
+                                class="form-select">
+
+                                <option value="">
+                                    All Priority
+                                </option>
+
+                                <option>
+                                    High
+                                </option>
+
+                                <option>
+                                    Medium
+                                </option>
+
+                                <option>
+                                    Low
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="table-responsive">
+
+                    <table class="table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Ticket
+                                </th>
+
+                                <th>
+                                    Title
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th>
+                                    Priority
+                                </th>
+
+                                <th>
+                                    Assignee
+                                </th>
+
+                                <th>
+                                    Due Date
+                                </th>
+
+                                <th>
+                                    Action
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="ticketRows">
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+</div>
+
+
+<script src="app.js"></script>
+
+</body>
+</html>

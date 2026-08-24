@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Ticket Dashboard | TicketHub</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        rel="stylesheet">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link
+        rel="stylesheet"
+        href="styles.css">
+
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-mark">
+                T
+            </div>
+
+            <div>
+
+                <h5>
+                    TicketHub
+                </h5>
+
+                <small>
+                    Internal Ticketing
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="side-scroll">
+
+            <div class="section-label">
+                Workspace
+            </div>
+
+
+            <a
+                data-nav
+                href="index.html"
+                class="nav-itemx">
+
+                <div class="nav-left">
+
+                    <i class="fa-solid fa-grid-2"></i>
+
+                    <span>
+                        Dashboard
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <a
+                data-nav
+                href="tickets.html"
+                class="nav-itemx">
+
+                <div class="nav-left">
+
+                    <i class="fa-solid fa-ticket"></i>
+
+                    <span>
+                        Tickets
+                    </span>
+
+                </div>
+
+                <span class="count">
+                    24
+                </span>
+
+            </a>
+
+
+            <a
+                data-nav
+                href="projects.html"
+                class="nav-itemx">
+
+                <div class="nav-left">
+
+                    <i class="fa-solid fa-folder"></i>
+
+                    <span>
+                        Projects
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <a
+                data-nav
+                href="team.html"
+                class="nav-itemx">
+
+                <div class="nav-left">
+
+                    <i class="fa-solid fa-users"></i>
+
+                    <span>
+                        Team
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <div class="section-label mt-4">
+                Management
+            </div>
+
+
+            <a
+                data-nav
+                href="reports.html"
+                class="nav-itemx">
+
+                <div class="nav-left">
+
+                    <i class="fa-solid fa-chart-column"></i>
+
+                    <span>
+                        Reports
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <a
+                data-nav
+                href="activity.html"
+                class="nav-itemx">
+
+                <div class="nav-left">
+
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+
+                    <span>
+                        Activity
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <a
+                data-nav
+                href="settings.html"
+                class="nav-itemx">
+
+                <div class="nav-left">
+
+                    <i class="fa-solid fa-gear"></i>
+
+                    <span>
+                        Settings
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <div class="section-label mt-4">
+                Current Project
+            </div>
+
+
+            <div class="project-box">
+
+                <div class="project-row active">
+                    <i
+                        class="fa-solid fa-circle me-2"
+                        style="font-size:7px;color:#147f70">
+                    </i>
+
+                    Sprint 1 – Internal Hub
+                </div>
+
+
+                <div class="project-row">
+
+                    <i
+                        class="fa-solid fa-circle me-2"
+                        style="font-size:7px;color:#b9c2ca">
+                    </i>
+
+                    FE-01 Repo Setup & Architecture
+
+                </div>
+
+
+                <div class="project-row">
+
+                    <i
+                        class="fa-solid fa-circle me-2"
+                        style="font-size:7px;color:#b9c2ca">
+                    </i>
+
+                    FE-02 Mocking & API Contracts
+
+                </div>
+
+
+                <div class="project-row">
+
+                    <i
+                        class="fa-solid fa-circle me-2"
+                        style="font-size:7px;color:#b9c2ca">
+                    </i>
+
+                    FE-03 Ticket Dashboard View
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="user-box">
+
+            <div class="avatar">
+                SA
+            </div>
+
+            <div>
+
+                <strong>
+                    System Administrator
+                </strong>
+
+                <small>
+                    Administrator
+                </small>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <div class="main">
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <div class="page-mini">
+
+                <div class="mini-icon">
+
+                    <i class="fa-solid fa-ticket"></i>
+
+                </div>
+
+                <div>
+
+                    <h6>
+                        Ticket Dashboard
+                    </h6>
+
+                    <small>
+                        FE-03 · Internal Ticketing & Infrastructure Hub
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="top-actions">
+
+                <button class="icon-btn">
+
+                    <i class="fa-regular fa-envelope"></i>
+
+                </button>
+
+
+                <button class="icon-btn">
+
+                    <i class="fa-regular fa-bell"></i>
+
+                    <span class="dot"></span>
+
+                </button>
+
+
+                <button
+                    class="icon-btn"
+                    onclick="location.href='settings.html'">
+
+                    <i class="fa-solid fa-gear"></i>
+
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- CONTENT -->
+
+        <main class="content">
+
+            <div class="heading-row">
+
+                <div>
+
+                    <div class="eyebrow">
+                        Internal Support Workspace
+                    </div>
+
+                    <h1>
+                        Ticket Dashboard
+                    </h1>
+
+                    <p>
+                        Monitor, manage and track all
+                        project tickets from one place.
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="create-ticket.html"
+                    class="btn btn-teal">
+
+                    <i class="fa-solid fa-plus me-2"></i>
+
+                    Create New Ticket
+
+                </a>
+
+            </div>
+
+
+            <!-- STAT CARDS -->
+
+            <div class="row g-3">
+
+                <div class="col-xl-3 col-md-6">
+
+                    <a href="tickets.html">
+
+                        <div class="cardx stat">
+
+                            <div class="stat-top">
+
+                                <span class="stat-label">
+                                    Total Tickets
+                                </span>
+
+                                <div class="stat-icon blue">
+
+                                    <i class="fa-solid fa-ticket"></i>
+
+                                </div>
+
+                            </div>
+
+                            <div class="stat-num">
+                                24
+                            </div>
+
+                            <div class="stat-note">
+
+                                <span class="up">
+                                    +4
+                                </span>
+
+                                this sprint
+
+                            </div>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+
+                <div class="col-xl-3 col-md-6">
+
+                    <a href="tickets.html?status=In%20Progress">
+
+                        <div class="cardx stat">
+
+                            <div class="stat-top">
+
+                                <span class="stat-label">
+                                    In Progress
+                                </span>
+
+                                <div class="stat-icon yellow">
+
+                                    <i class="fa-solid fa-spinner"></i>
+
+                                </div>
+
+                            </div>
+
+                            <div class="stat-num">
+                                08
+                            </div>
+
+                            <div class="stat-note">
+                                Currently being worked on
+                            </div>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+
+                <div class="col-xl-3 col-md-6">
+
+                    <a href="tickets.html?status=Code%20Review">
+
+                        <div class="cardx stat">
+
+                            <div class="stat-top">
+
+                                <span class="stat-label">
+                                    Code Review
+                                </span>
+
+                                <div class="stat-icon purple">
+
+                                    <i class="fa-solid fa-code"></i>
+
+                                </div>
+
+                            </div>
+
+                            <div class="stat-num">
+                                04
+                            </div>
+
+                            <div class="stat-note">
+                                Waiting for review
+                            </div>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+
+                <div class="col-xl-3 col-md-6">
+
+                    <a href="tickets.html?status=Completed">
+
+                        <div class="cardx stat">
+
+                            <div class="stat-top">
+
+                                <span class="stat-label">
+                                    Completed
+                                </span>
+
+                                <div class="stat-icon green">
+
+                                    <i class="fa-solid fa-check"></i>
+
+                                </div>
+
+                            </div>
+
+                            <div class="stat-num">
+                                12
+                            </div>
+
+                            <div class="stat-note">
+
+                                <span class="up">
+                                    50%
+                                </span>
+
+                                completion rate
+
+                            </div>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- LOWER SECTION -->
+
+            <div class="row g-4">
+
+                <!-- TICKETS -->
+
+                <div class="col-xl-8">
+
+                    <div class="cardx section-card">
+
+                        <div class="section-head">
+
+                            <div>
+
+                                <h5>
+                                    All Tickets
+                                </h5>
+
+                                <small>
+                                    View and manage project tickets
+                                </small>
+
+                            </div>
+
+                            <a
+                                class="viewall"
+                                href="tickets.html">
+
+                                View All
+
+                            </a>
+
+                        </div>
+
+
+                        <div class="table-responsive">
+
+                            <table class="table">
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th>
+                                            Ticket
+                                        </th>
+
+                                        <th>
+                                            Title
+                                        </th>
+
+                                        <th>
+                                            Status
+                                        </th>
+
+                                        <th>
+                                            Priority
+                                        </th>
+
+                                        <th>
+                                            Assignee
+                                        </th>
+
+                                        <th>
+                                            Due Date
+                                        </th>
+
+                                    </tr>
+
+                                </thead>
+
+
+                                <tbody id="dashboardRows">
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- RIGHT SIDE -->
+
+                <div class="col-xl-4">
+
+                    <div class="cardx section-card">
+
+                        <div class="section-head">
+
+                            <div>
+
+                                <h5>
+                                    Ticket Status
+                                </h5>
+
+                                <small>
+                                    Current distribution
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="status-panel">
+
+                            <div class="status-line">
+
+                                <div class="line-top">
+
+                                    <span>
+                                        Open
+                                    </span>
+
+                                    <strong>
+                                        3
+                                    </strong>
+
+                                </div>
+
+                                <div class="progress">
+
+                                    <div
+                                        class="progress-bar"
+                                        style="width:25%">
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="status-line">
+
+                                <div class="line-top">
+
+                                    <span>
+                                        In Progress
+                                    </span>
+
+                                    <strong>
+                                        8
+                                    </strong>
+
+                                </div>
+
+                                <div class="progress">
+
+                                    <div
+                                        class="progress-bar"
+                                        style="width:67%">
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="status-line">
+
+                                <div class="line-top">
+
+                                    <span>
+                                        Code Review
+                                    </span>
+
+                                    <strong>
+                                        4
+                                    </strong>
+
+                                </div>
+
+                                <div class="progress">
+
+                                    <div
+                                        class="progress-bar"
+                                        style="width:34%">
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="status-line">
+
+                                <div class="line-top">
+
+                                    <span>
+                                        Resolved
+                                    </span>
+
+                                    <strong>
+                                        12
+                                    </strong>
+
+                                </div>
+
+                                <div class="progress">
+
+                                    <div
+                                        class="progress-bar"
+                                        style="width:100%">
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ACTIVITY -->
+
+                    <div class="cardx section-card">
+
+                        <div class="section-head">
+
+                            <div>
+
+                                <h5>
+                                    Recent Activity
+                                </h5>
+
+                                <small>
+                                    Latest project updates
+                                </small>
+
+                            </div>
+
+                            <a
+                                class="viewall"
+                                href="activity.html">
+
+                                View All
+
+                            </a>
+
+                        </div>
+
+
+                        <div class="activity">
+
+                            <div class="activity-item">
+
+                                <span class="activity-dot"></span>
+
+                                <div>
+
+                                    <p>
+                                        <strong>
+                                            FE-03
+                                        </strong>
+
+                                        moved to Code Review
+                                    </p>
+
+                                    <small>
+                                        12 minutes ago
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="activity-item">
+
+                                <span class="activity-dot"></span>
+
+                                <div>
+
+                                    <p>
+                                        <strong>
+                                            FE-02
+                                        </strong>
+
+                                        updated by Maryam
+                                    </p>
+
+                                    <small>
+                                        34 minutes ago
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="activity-item">
+
+                                <span class="activity-dot"></span>
+
+                                <div>
+
+                                    <p>
+                                        New ticket created by Ahmed
+                                    </p>
+
+                                    <small>
+                                        1 hour ago
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+</div>
+
+
+<script src="app.js"></script>
+
+</body>
+</html>
