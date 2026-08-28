@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InfraHub - Internal Ticketing & Infrastructure</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --text-primary: #2C3E50;
+  --text-secondary: #5F6B73;
+  --text-muted: #849099;
+  --text-on-dark: #FFFFFF;
+  
+  --brand-primary: #187666;
+  --brand-primary-hover: #125B50;
+  --brand-light: #E8F4F1;
+
+  --bg-void: #F8FAFC;
+  --bg-panel: #FFFFFF;
+  --bg-panel-raised: #EBF2F1;
+  --border-line: #E2E8F0;
+  
+  --status-open: #0284C7;
+  --status-open-bg: #E0F2FE;
+  --status-progress: #D97706;
+  --status-progress-bg: #FEF3C7;
+  --status-resolved: #16A34A;
+  --status-resolved-bg: #DCFCE7;
+  --status-critical: #DC2626;
+  --status-critical-bg: #FEE2E2;
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  background: var(--bg-void);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  overflow-x: hidden;
+}
+
+a { color: var(--brand-primary); text-decoration: none; }
+a:hover { color: var(--brand-primary-hover); }
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-void); }
+::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+
+.mono { font-family: 'JetBrains Mono', monospace; }
+.app-shell { display: flex; min-height: 100vh; }
+
+/* SIDEBAR LAYOUT */
+.sidebar {
+  width: 250px;
+  flex-shrink: 0;
+  background: var(--bg-panel);
+  border-right: 1px solid var(--border-line);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+.brand {
+  padding: 24px;
+  border-bottom: 1px solid var(--border-line);
+  display: flex; align-items: center; gap: 12px;
+}
+.brand-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: var(--brand-light); color: var(--brand-primary);
+  display: flex; align-items: center; justify-content: center; font-size: 20px;
+}
+.brand-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700; font-size: 18px; color: var(--text-primary);
+}
+
+.nav-group { padding: 20px 14px 6px 14px; }
+.nav-label {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--text-muted); padding: 4px 12px 10px 12px; font-weight: 700;
+}
+.nav-link-custom {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px; border-radius: 10px;
+  color: var(--text-secondary); font-size: 14px; font-weight: 500;
+  margin-bottom: 4px; cursor: pointer; transition: all .15s ease;
+}
+.nav-link-custom .link-left { display: flex; align-items: center; gap: 12px; }
+.nav-link-custom i { font-size: 18px; color: var(--text-secondary); transition: color .15s; }
+.nav-link-custom:hover { background: var(--bg-void); color: var(--brand-primary); }
+.nav-link-custom:hover i { color: var(--brand-primary); }
+.nav-link-custom.active {
+  background: var(--brand-light); color: var(--brand-primary); font-weight: 600;
+}
+.nav-link-custom.active i { color: var(--brand-primary); }
+.nav-badge {
+  background: var(--brand-primary); color: var(--text-on-dark);
+  font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 12px;
+}
+
+/* MAIN CONTENT */
+.main-area { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 32px; border-bottom: 1px solid var(--border-line);
+  background: var(--bg-panel); position: sticky; top: 0; z-index: 20;
+}
+.topbar h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 22px; font-weight: 700; margin: 0; color: var(--text-primary);
+}
+.topbar .subtitle { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+.content-pad { padding: 32px; }
+
+/* TOPBAR ACTION ICONS */
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.topbar-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  border: 1px solid var(--border-line);
+  background: var(--bg-panel);
+  color: var(--brand-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+.topbar-btn:hover {
+  background: var(--brand-light);
+  border-color: var(--brand-primary);
+  color: var(--brand-primary-hover);
+  transform: translateY(-1px);
+}
+.topbar-btn .dot-badge {
+  position: absolute;
+  top: 9px;
+  right: 10px;
+  width: 8px;
+  height: 8px;
+  background-color: var(--status-critical);
+  border-radius: 50%;
+  border: 2px solid var(--bg-panel);
+}
+
+/* CONTROLS & COMPONENTS */
+.search-wrap { position: relative; width: 240px; }
+.search-wrap i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+.search-input {
+  background: var(--bg-void); border: 1px solid var(--border-line);
+  color: var(--text-primary); border-radius: 8px;
+  padding: 8px 12px 8px 34px; font-size: 13px; width: 100%;
+}
+.search-input:focus { outline: none; border-color: var(--brand-primary); }
+
+.btn-brand {
+  background: var(--brand-primary); border: none; color: var(--text-on-dark);
+  font-weight: 600; font-size: 14px; padding: 10px 20px; border-radius: 10px;
+  display: inline-flex; align-items: center; gap: 8px;
+  box-shadow: 0 2px 4px rgba(24, 118, 102, 0.2); transition: all .15s ease;
+}
+.btn-brand:hover { background: var(--brand-primary-hover); color: var(--text-on-dark); transform: translateY(-1px); }
+
+.btn-ghost {
+  background: var(--bg-panel); border: 1px solid var(--border-line);
+  color: var(--text-secondary); font-size: 13px; font-weight: 500;
+  padding: 8px 14px; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px;
+}
+.btn-ghost:hover { background: var(--bg-void); color: var(--text-primary); }
+
+.btn-icon-sm {
+  width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 6px; border: 1px solid var(--border-line);
+  background: var(--bg-panel); color: var(--text-secondary); font-size: 12px;
+}
+.btn-icon-sm:hover { background: var(--bg-void); color: var(--brand-primary); }
+.btn-icon-sm.danger:hover { color: var(--status-critical); border-color: var(--status-critical); }
+
+/* STAT CARDS */
+.stat-card {
+  background: var(--bg-panel); border: 1px solid var(--border-line);
+  border-radius: 14px; padding: 20px; box-shadow: var(--shadow-sm);
+  display: flex; align-items: center; justify-content: space-between; transition: transform .15s ease;
+}
+.stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.stat-card .stat-label { font-size: 12px; color: var(--text-secondary); font-weight: 600; margin-bottom: 4px; }
+.stat-card .stat-value { font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 700; color: var(--text-primary); }
+.stat-icon {
+  width: 44px; height: 44px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center; font-size: 20px;
+}
+
+.panel {
+  background: var(--bg-panel); border: 1px solid var(--border-line);
+  border-radius: 14px; overflow: hidden; box-shadow: var(--shadow-sm); margin-bottom: 24px;
+}
+.panel-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 24px; border-bottom: 1px solid var(--border-line); background: #FAFAFA;
+}
+.panel-title { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 16px; color: var(--text-primary); }
+
+.chip-filter {
+  background: var(--bg-void); border: 1px solid var(--border-line);
+  color: var(--text-secondary); font-size: 12px; padding: 6px 14px;
+  border-radius: 20px; cursor: pointer; transition: all .12s ease; font-weight: 500;
+}
+.chip-filter.active { background: var(--brand-primary); color: var(--text-on-dark); border-color: var(--brand-primary); }
+
+/* TABLES */
+.custom-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+.custom-table th {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;
+  color: var(--text-muted); padding: 14px 20px; border-bottom: 1px solid var(--border-line); background: #F8FAFC;
+}
+.custom-table td { padding: 16px 20px; border-bottom: 1px solid var(--border-line); vertical-align: middle; }
+.custom-table tr:hover td { background: var(--bg-void); }
+
+.badge-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 20px; }
+.badge-pill .bdot { width: 6px; height: 6px; border-radius: 50%; }
+.badge-open { background: var(--status-open-bg); color: var(--status-open); }
+.badge-open .bdot { background: var(--status-open); }
+.badge-progress { background: var(--status-progress-bg); color: var(--status-progress); }
+.badge-progress .bdot { background: var(--status-progress); }
+.badge-resolved { background: var(--status-resolved-bg); color: var(--status-resolved); }
+.badge-resolved .bdot { background: var(--status-resolved); }
+.badge-critical { background: var(--status-critical-bg); color: var(--status-critical); }
+.badge-critical .bdot { background: var(--status-critical); }
+
+.prio-tag { font-size: 11px; font-weight: 600; }
+.prio-critical { color: var(--status-critical); }
+.prio-high { color: var(--status-progress); }
+.prio-medium { color: var(--status-open); }
+.prio-low { color: var(--text-muted); }
+
+.avatar-chip {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--brand-light); color: var(--brand-primary);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700;
+}
+
+/* SERVER CARDS */
+.server-card { background: var(--bg-panel); border: 1px solid var(--border-line); border-radius: 12px; padding: 16px; }
+.metric-row { margin-bottom: 8px; }
+.metric-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-secondary); margin-bottom: 4px; }
+.progress-track { height: 6px; border-radius: 4px; background: var(--bg-void); overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 4px; }
+.fill-ok { background: var(--status-resolved); }
+.fill-warn { background: var(--status-progress); }
+.fill-crit { background: var(--status-critical); }
+
+.health-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.health-dot.healthy { background: var(--status-resolved); }
+.health-dot.warning { background: var(--status-progress); }
+.health-dot.critical { background: var(--status-critical); }
+
+/* VIEW DISPLAY CONTROLS */
+.view-section { display: none; }
+.view-section.active { display: block; }
+.form-control-custom, .form-select-custom {
+  width: 100%; background: var(--bg-void); border: 1px solid var(--border-line);
+  padding: 8px 12px; border-radius: 6px; color: var(--text-primary);
+}
+.form-control-custom:focus, .form-select-custom:focus {
+  outline: none; border-color: var(--brand-primary);
+}
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- SIDEBAR NAVIGATION -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon"><i class="bi bi-cpu-fill"></i></div>
+      <div class="brand-title">InfraHub</div>
+    </div>
+
+    <!-- WORKSPACE -->
+    <div class="nav-group">
+      <div class="nav-label">Workspace</div>
+      
+      <a class="nav-link-custom active" data-view="dashboard" onclick="switchView('dashboard')">
+        <div class="link-left"><i class="bi bi-grid-1x2-fill"></i> Dashboard</div>
+      </a>
+      
+      <a class="nav-link-custom" data-view="tickets" onclick="switchView('tickets')">
+        <div class="link-left"><i class="bi bi-ticket-perforated-fill"></i> Tickets</div>
+        <span class="nav-badge" id="sidebarTicketCount">0</span>
+      </a>
+      
+      <a class="nav-link-custom" data-view="projects" onclick="switchView('projects')">
+        <div class="link-left"><i class="bi bi-folder-fill"></i> Projects</div>
+      </a>
+
+      <a class="nav-link-custom" data-view="team" onclick="switchView('team')">
+        <div class="link-left"><i class="bi bi-people-fill"></i> Team</div>
+      </a>
+    </div>
+
+    <!-- MANAGEMENT -->
+    <div class="nav-group">
+      <div class="nav-label">Management</div>
+      
+      <a class="nav-link-custom" data-view="reports" onclick="switchView('reports')">
+        <div class="link-left"><i class="bi bi-bar-chart-line-fill"></i> Reports &amp; Health</div>
+      </a>
+
+      <a class="nav-link-custom" data-view="activity" onclick="switchView('activity')">
+        <div class="link-left"><i class="bi bi-clock-history"></i> Activity</div>
+      </a>
+
+      <a class="nav-link-custom" data-view="settings" onclick="switchView('settings')">
+        <div class="link-left"><i class="bi bi-gear-fill"></i> Settings</div>
+      </a>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTAINER -->
+  <div class="main-area">
+
+    <!-- 1. DASHBOARD OVERVIEW VIEW -->
+    <div class="view-section active" id="view-dashboard">
+      <div class="topbar">
+        <div>
+          <h1>System Overview</h1>
+          <div class="subtitle">Real-time status of services, tickets, and cloud operations</div>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <div class="topbar-actions">
+            <button class="topbar-btn" onclick="openMessagesModal()" title="Messages"><i class="bi bi-envelope"></i></button>
+            <button class="topbar-btn" onclick="openNotificationsModal()" title="Notifications">
+              <i class="bi bi-bell"></i>
+              <span class="dot-badge" id="notifBadge"></span>
+            </button>
+            <button class="topbar-btn" onclick="switchView('settings')" title="Settings"><i class="bi bi-gear"></i></button>
+          </div>
+          <button class="btn-brand" onclick="openCreateModal()"><i class="bi bi-plus-lg"></i> Quick Action</button>
+        </div>
+      </div>
+      
+      <div class="content-pad">
+        <!-- METRIC CARDS -->
+        <div class="row g-3 mb-4">
+          <div class="col-6 col-lg-3">
+            <div class="stat-card">
+              <div>
+                <div class="stat-label">SYSTEM HEALTH</div>
+                <div class="stat-value text-success">99.9%</div>
+                <div style="font-size:11px; margin-top:4px; color:var(--text-muted);"><i class="bi bi-arrow-up-short text-success"></i> Operational</div>
+              </div>
+              <div class="stat-icon" style="background:#DCFCE7; color:#16A34A;"><i class="bi bi-heart-pulse-fill"></i></div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-3">
+            <div class="stat-card">
+              <div>
+                <div class="stat-label">ACTIVE TICKETS</div>
+                <div class="stat-value" id="dashActiveTickets">0</div>
+                <div style="font-size:11px; margin-top:4px; color:var(--text-muted);">2 High Priority</div>
+              </div>
+              <div class="stat-icon" style="background:#E0F2FE; color:#0284C7;"><i class="bi bi-ticket-detailed-fill"></i></div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-3">
+            <div class="stat-card">
+              <div>
+                <div class="stat-label">ACTIVE DEPLOYMENTS</div>
+                <div class="stat-value">14</div>
+                <div style="font-size:11px; margin-top:4px; color:var(--text-muted);">All Staging &amp; Prod</div>
+              </div>
+              <div class="stat-icon" style="background:#FEF3C7; color:#D97706;"><i class="bi bi-box-seam-fill"></i></div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-3">
+            <div class="stat-card">
+              <div>
+                <div class="stat-label">PENDING REVIEWS</div>
+                <div class="stat-value">5</div>
+                <div style="font-size:11px; margin-top:4px; color:var(--text-muted);">PRs Awaiting Audit</div>
+              </div>
+              <div class="stat-icon" style="background:#F3E8FF; color:#9333EA;"><i class="bi bi-file-earmark-code-fill"></i></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MAIN CHART & HEALTH STATUS -->
+        <div class="row g-4 mb-4">
+          <div class="col-lg-8">
+            <div class="panel h-100 mb-0">
+              <div class="panel-head">
+                <div class="panel-title">System Performance &amp; Traffic</div>
+                <div class="d-flex gap-2">
+                  <span class="chip-filter active">7 Days</span>
+                  <span class="chip-filter">30 Days</span>
+                </div>
+              </div>
+              <div style="padding:24px; position:relative; height:300px;">
+                <canvas id="dashOverviewChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4">
+            <div class="panel h-100 mb-0">
+              <div class="panel-head">
+                <div class="panel-title">Quick Health Status</div>
+                <i class="bi bi-three-dots-vertical" style="color:var(--text-muted);"></i>
+              </div>
+              <div style="padding:20px;">
+                <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
+                  <div>
+                    <strong style="font-size:14px;">API Gateway</strong>
+                    <div style="font-size:12px; color:var(--text-secondary);">eu-west-1 • 24ms ping</div>
+                  </div>
+                  <span class="badge-pill badge-resolved"><span class="bdot"></span>Operational</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
+                  <div>
+                    <strong style="font-size:14px;">Primary Database</strong>
+                    <div style="font-size:12px; color:var(--text-secondary);">us-east-1 • 12ms ping</div>
+                  </div>
+                  <span class="badge-pill badge-resolved"><span class="bdot"></span>Operational</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <strong style="font-size:14px;">Auth Microservice</strong>
+                    <div style="font-size:12px; color:var(--text-secondary);">ap-southeast-1 • 110ms ping</div>
+                  </div>
+                  <span class="badge-pill badge-progress"><span class="bdot"></span>High Latency</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RECENT TICKETS PREVIEW TABLE -->
+        <div class="panel mb-0">
+          <div class="panel-head">
+            <div class="panel-title">Recent Tickets</div>
+            <a href="#" onclick="switchView('tickets')" style="font-size:13px; font-weight:600;">View All →</a>
+          </div>
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Issue Title</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Assignee</th>
+              </tr>
+            </thead>
+            <tbody id="dashTicketBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. TICKETS WORKSPACE VIEW -->
+    <div class="view-section" id="view-tickets">
+      <div class="topbar">
+        <div>
+          <h1>Tickets Workspace</h1>
+          <div class="subtitle">Manage and resolve system issues and requests</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px;">
+          <div class="search-wrap">
+            <i class="bi bi-search"></i>
+            <input type="text" class="search-input" id="searchInput" placeholder="Search tickets..." oninput="renderTickets()">
+          </div>
+          <!-- 3 ACTION ICONS (Mail, Notification, Settings) -->
+          <div class="topbar-actions">
+            <button class="topbar-btn" onclick="openMessagesModal()" title="Messages"><i class="bi bi-envelope"></i></button>
+            <button class="topbar-btn" onclick="openNotificationsModal()" title="Notifications">
+              <i class="bi bi-bell"></i>
+              <span class="dot-badge" id="notifBadgeTickets"></span>
+            </button>
+            <button class="topbar-btn" onclick="switchView('settings')" title="Settings"><i class="bi bi-gear"></i></button>
+          </div>
+          <button class="btn-brand" onclick="openCreateModal()"><i class="bi bi-plus-lg"></i> Create New Ticket</button>
+        </div>
+      </div>
+      <div class="content-pad">
+        <div class="row g-3 mb-4">
+          <div class="col-6 col-lg-3"><div class="stat-card"><div><div class="stat-label">TOTAL TICKETS</div><div class="stat-value" id="statTotal">0</div></div></div></div>
+          <div class="col-6 col-lg-3"><div class="stat-card"><div><div class="stat-label">OPEN</div><div class="stat-value" style="color:var(--status-open);" id="statOpen">0</div></div></div></div>
+          <div class="col-6 col-lg-3"><div class="stat-card"><div><div class="stat-label">IN PROGRESS</div><div class="stat-value" style="color:var(--status-progress);" id="statProgress">0</div></div></div></div>
+          <div class="col-6 col-lg-3"><div class="stat-card"><div><div class="stat-label">CRITICAL</div><div class="stat-value text-danger" id="statCritical">0</div></div></div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <div class="panel-title">All Tickets</div>
+            <div style="display:flex; gap:8px;">
+              <span class="chip-filter active" data-filter="all" onclick="setStatusFilter('all')">All</span>
+              <span class="chip-filter" data-filter="Open" onclick="setStatusFilter('Open')">Open</span>
+              <span class="chip-filter" data-filter="In Progress" onclick="setStatusFilter('In Progress')">In Progress</span>
+              <span class="chip-filter" data-filter="Resolved" onclick="setStatusFilter('Resolved')">Resolved</span>
+            </div>
+            <select class="form-select-custom" style="width:140px;" id="priorityFilter" onchange="renderTickets()">
+              <option value="all">All Priorities</option>
+              <option value="Critical">Critical</option>
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Priority</th>
+                  <th>Status</th>
+                  <th>Assignee</th>
+                  <th>Created</th>
+                  <th style="text-align:right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="ticketTableBody"></tbody>
+            </table>
+          </div>
+          <div id="emptyState" style="padding:40px; text-align:center; color:var(--text-muted); display:none;">No tickets match your filters.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. PROJECTS VIEW -->
+    <div class="view-section" id="view-projects">
+      <div class="topbar">
+        <div>
+          <h1>Infrastructure Projects</h1>
+          <div class="subtitle">Active engineering sprints and roadmap deliverables</div>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <div class="topbar-actions">
+            <button class="topbar-btn" onclick="openMessagesModal()" title="Messages"><i class="bi bi-envelope"></i></button>
+            <button class="topbar-btn" onclick="openNotificationsModal()" title="Notifications"><i class="bi bi-bell"></i></button>
+            <button class="topbar-btn" onclick="switchView('settings')" title="Settings"><i class="bi bi-gear"></i></button>
+          </div>
+          <button class="btn-brand"><i class="bi bi-plus-lg"></i> New Project</button>
+        </div>
+      </div>
+      <div class="content-pad">
+        <div class="row g-3" id="projectsGrid"></div>
+      </div>
+    </div>
+
+    <!-- 4. TEAM VIEW -->
+    <div class="view-section" id="view-team">
+      <div class="topbar">
+        <div>
+          <h1>Engineering Team</h1>
+          <div class="subtitle">Manage engineers, roles, and access credentials</div>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <div class="topbar-actions">
+            <button class="topbar-btn" onclick="openMessagesModal()"><i class="bi bi-envelope"></i></button>
+            <button class="topbar-btn" onclick="openNotificationsModal()"><i class="bi bi-bell"></i></button>
+            <button class="topbar-btn" onclick="switchView('settings')"><i class="bi bi-gear"></i></button>
+          </div>
+          <button class="btn-brand"><i class="bi bi-person-plus-fill"></i> Add Member</button>
+        </div>
+      </div>
+      <div class="content-pad">
+        <div class="panel">
+          <div class="panel-head"><div class="panel-title">Active Team Members</div></div>
+          <div style="overflow-x:auto;">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Member</th>
+                  <th>Role</th>
+                  <th>Department</th>
+                  <th>Assigned Tickets</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="teamTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. REPORTS & HEALTH VIEW -->
+    <div class="view-section" id="view-reports">
+      <div class="topbar">
+        <div>
+          <h1>Infrastructure Health &amp; Reports</h1>
+          <div class="subtitle">Live node metrics &amp; cluster telemetry</div>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <div class="topbar-actions">
+            <button class="topbar-btn" onclick="openMessagesModal()"><i class="bi bi-envelope"></i></button>
+            <button class="topbar-btn" onclick="openNotificationsModal()"><i class="bi bi-bell"></i></button>
+            <button class="topbar-btn" onclick="switchView('settings')"><i class="bi bi-gear"></i></button>
+          </div>
+          <button class="btn-ghost" onclick="toggleLiveFeed()"><i class="bi bi-pause-fill" id="liveFeedIcon"></i> <span id="liveFeedLabel">Pause Live Feed</span></button>
+        </div>
+      </div>
+      <div class="content-pad">
+        <div class="row g-3 mb-4">
+          <div class="col-6 col-lg-3"><div class="stat-card"><div><div class="stat-label">HEALTHY NODES</div><div class="stat-value" id="srvHealthy">0</div></div></div></div>
+          <div class="col-6 col-lg-3"><div class="stat-card"><div><div class="stat-label">WARNINGS</div><div class="stat-value" id="srvWarning">0</div></div></div></div>
+          <div class="col-6 col-lg-3"><div class="stat-card"><div><div class="stat-label">CRITICAL NODES</div><div class="stat-value" id="srvCritical">0</div></div></div></div>
+          <div class="col-6 col-lg-3"><div class="stat-card"><div><div class="stat-label">AVG CPU LOAD</div><div class="stat-value" id="srvAvgCpu">0%</div></div></div></div>
+        </div>
+
+        <div class="row g-3 mb-4">
+          <div class="col-md-8"><div class="panel" style="padding:16px; height:240px;"><canvas id="cpuLineChart"></canvas></div></div>
+          <div class="col-md-4"><div class="panel" style="padding:16px; height:240px;"><canvas id="resourceDonut"></canvas></div></div>
+        </div>
+
+        <div class="row g-3" id="serverGrid"></div>
+      </div>
+    </div>
+
+    <!-- 6. ACTIVITY LOG VIEW -->
+    <div class="view-section" id="view-activity">
+      <div class="topbar">
+        <div>
+          <h1>Activity &amp; Audit Log</h1>
+          <div class="subtitle">Complete chronological history of changes and ticket actions</div>
+        </div>
+        <div class="topbar-actions">
+          <button class="topbar-btn" onclick="openMessagesModal()"><i class="bi bi-envelope"></i></button>
+          <button class="topbar-btn" onclick="openNotificationsModal()"><i class="bi bi-bell"></i></button>
+          <button class="topbar-btn" onclick="switchView('settings')"><i class="bi bi-gear"></i></button>
+        </div>
+      </div>
+      <div class="content-pad">
+        <div class="panel">
+          <div class="panel-head"><div class="panel-title">System Event Stream</div></div>
+          <div style="padding:20px;" id="activityStream"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. SETTINGS VIEW -->
+    <div class="view-section" id="view-settings">
+      <div class="topbar">
+        <div>
+          <h1>Hub Settings</h1>
+          <div class="subtitle">Manage system preferences and notifications</div>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <div class="topbar-actions">
+            <button class="topbar-btn" onclick="openMessagesModal()"><i class="bi bi-envelope"></i></button>
+            <button class="topbar-btn" onclick="openNotificationsModal()"><i class="bi bi-bell"></i></button>
+            <button class="topbar-btn" onclick="switchView('settings')"><i class="bi bi-gear"></i></button>
+          </div>
+          <button class="btn-brand" onclick="showToast('Settings saved successfully!')">Save Changes</button>
+        </div>
+      </div>
+      <div class="content-pad">
+        <div class="row g-4">
+          <div class="col-md-6">
+            <div class="panel" style="padding:20px;">
+              <h5 style="font-size:15px; font-weight:700; margin-bottom:16px; color:var(--text-primary);">General Preferences</h5>
+              <div class="mb-3">
+                <label class="form-label" style="color:var(--text-secondary);">Platform Title</label>
+                <input type="text" class="form-control-custom" value="InfraHub Hub">
+              </div>
+              <div class="mb-3">
+                <label class="form-label" style="color:var(--text-secondary);">Default Alert Channel</label>
+                <select class="form-select-custom">
+                  <option>Slack #infra-alerts</option>
+                  <option>Email Notifications</option>
+                  <option>Microsoft Teams</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="panel" style="padding:20px;">
+              <h5 style="font-size:15px; font-weight:700; margin-bottom:16px; color:var(--text-primary);">Notification Toggles</h5>
+              <div class="form-check form-switch mb-3">
+                <input class="form-check-input" type="checkbox" id="n1" checked>
+                <label class="form-check-label" for="n1" style="color:var(--text-secondary);">Email on Critical Ticket Creation</label>
+              </div>
+              <div class="form-check form-switch mb-3">
+                <input class="form-check-input" type="checkbox" id="n2" checked>
+                <label class="form-check-label" for="n2" style="color:var(--text-secondary);">Auto-escalate tickets older than 48h</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MESSAGES MODAL -->
+<div class="modal fade" id="messagesModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="background:var(--bg-panel); border-color:var(--border-line);">
+      <div class="modal-header">
+        <h5 class="modal-title" style="color:var(--text-primary);"><i class="bi bi-envelope me-2" style="color:var(--brand-primary);"></i> Team Messages</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="d-flex align-items-center gap-3 p-2 mb-2 rounded" style="background:var(--bg-void);">
+          <span class="avatar-chip">AK</span>
+          <div class="flex-grow-1">
+            <div style="font-weight:600; font-size:13px; color:var(--text-primary);">Ayesha Khan</div>
+            <div style="font-size:12px; color:var(--text-secondary);">Please review ticket TCK-1001 deployment logs.</div>
+          </div>
+          <span style="font-size:10px; color:var(--text-muted);">10m ago</span>
+        </div>
+        <div class="d-flex align-items-center gap-3 p-2 rounded" style="background:var(--bg-void);">
+          <span class="avatar-chip">HT</span>
+          <div class="flex-grow-1">
+            <div style="font-weight:600; font-size:13px; color:var(--text-primary);">Hamza Tariq</div>
+            <div style="font-size:12px; color:var(--text-secondary);">Staging DB backup completed successfully.</div>
+          </div>
+          <span style="font-size:10px; color:var(--text-muted);">1h ago</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NOTIFICATIONS MODAL -->
+<div class="modal fade" id="notificationsModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="background:var(--bg-panel); border-color:var(--border-line);">
+      <div class="modal-header">
+        <h5 class="modal-title" style="color:var(--text-primary);"><i class="bi bi-bell me-2" style="color:var(--brand-primary);"></i> System Notifications</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="p-3 mb-2 rounded" style="background:var(--status-critical-bg); border-left:4px solid var(--status-critical);">
+          <div style="font-weight:700; color:var(--status-critical); font-size:13px;">Critical Alert</div>
+          <div style="font-size:12px; color:var(--text-primary);">High Memory utilization detected on db-primary (78%).</div>
+        </div>
+        <div class="p-3 rounded" style="background:var(--status-progress-bg); border-left:4px solid var(--status-progress);">
+          <div style="font-weight:700; color:var(--status-progress); font-size:13px;">System Warning</div>
+          <div style="font-size:12px; color:var(--text-primary);">Auth Microservice ping delayed (110ms).</div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" onclick="clearNotifDot();" data-bs-dismiss="modal">Mark all as read</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TICKET FORM MODAL -->
+<div class="modal fade" id="ticketModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="background:var(--bg-panel); border-color:var(--border-line);">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ticketModalTitle" style="color:var(--text-primary);">Create Ticket</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form id="ticketForm" onsubmit="return saveTicket(event)">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label" style="color:var(--text-secondary);">Title</label>
+            <input type="text" class="form-control-custom" id="fTitle" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" style="color:var(--text-secondary);">Description</label>
+            <textarea class="form-control-custom" id="fDescription" rows="3" required></textarea>
+          </div>
+          <div class="row g-2 mb-3">
+            <div class="col-6">
+              <label class="form-label" style="color:var(--text-secondary);">Priority</label>
+              <select class="form-select-custom" id="fPriority">
+                <option>Low</option><option>Medium</option><option>High</option><option>Critical</option>
+              </select>
+            </div>
+            <div class="col-6">
+              <label class="form-label" style="color:var(--text-secondary);">Status</label>
+              <select class="form-select-custom" id="fStatus">
+                <option>Open</option><option>In Progress</option><option>Resolved</option>
+              </select>
+            </div>
+          </div>
+          <div class="row g-2">
+            <div class="col-6">
+              <label class="form-label" style="color:var(--text-secondary);">Category</label>
+              <input type="text" class="form-control-custom" id="fCategory" required>
+            </div>
+            <div class="col-6">
+              <label class="form-label" style="color:var(--text-secondary);">Assignee</label>
+              <input type="text" class="form-control-custom" id="fAssignee" required>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-ghost" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn-brand">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div id="appToast" class="toast align-items-center text-white border-0" style="background:var(--text-primary);" role="alert">
+    <div class="d-flex"><div class="toast-body" id="appToastBody">Done</div></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+
+<script>
+/* STATE DATA */
+let ticketSeq = 1006;
+let tickets = [
+  { id:'TCK-1001', title:'Login page 500 error', description:'Intermittent 500 errors on production login build.', priority:'Critical', status:'Open', category:'Bug', assignee:'Ayesha Khan', created:daysAgo(0) },
+  { id:'TCK-1002', title:'VPN access for new hire', description:'Backend developer needs staging DB & VPN access.', priority:'Medium', status:'Open', category:'Access Request', assignee:'Bilal Ahmed', created:daysAgo(1) },
+  { id:'TCK-1003', title:'Disk usage above 85%', description:'Log rotation required on staging node.', priority:'High', status:'In Progress', category:'Server', assignee:'Hamza Tariq', created:daysAgo(1) },
+  { id:'TCK-1004', title:'Dark mode toggle', description:'User feature request for permanent dark layout.', priority:'Low', status:'Open', category:'Feature Request', assignee:'Sana Malik', created:daysAgo(2) },
+  { id:'TCK-1005', title:'API gateway 502 spikes', description:'Connection pool exhaustion suspected during batch runs.', priority:'High', status:'In Progress', category:'Network', assignee:'Ahmed Raza', created:daysAgo(3) },
+  { id:'TCK-1006', title:'Password reset mail delay', description:'Emails delayed by 15 mins due to mail queue.', priority:'Medium', status:'Resolved', category:'Bug', assignee:'Zainab Fatima', created:daysAgo(4) },
+];
+
+let projects = [
+  { name:'Cloud Migration v2', progress:75, status:'In Progress', leads:'Ayesha & Bilal', tasks:'18/24 Tasks' },
+  { name:'Kubernetes Cluster Upgrade', progress:40, status:'In Progress', leads:'Hamza Tariq', tasks:'8/20 Tasks' },
+  { name:'Security & OAuth Refactor', progress:90, status:'Review', leads:'Ahmed Raza', tasks:'27/30 Tasks' },
+  { name:'Logging Architecture Revamp', progress:20, status:'Planning', leads:'Sana Malik', tasks:'3/15 Tasks' }
+];
+
+let teamMembers = [
+  { name:'Ayesha Khan', role:'Lead DevOps', dept:'Infrastructure', tickets:3, status:'Active' },
+  { name:'Bilal Ahmed', role:'Cloud Architect', dept:'Infrastructure', tickets:2, status:'Active' },
+  { name:'Hamza Tariq', role:'SysAdmin', dept:'Operations', tickets:4, status:'Active' },
+  { name:'Sana Malik', role:'Frontend Dev', dept:'UI/UX', tickets:1, status:'In Meeting' },
+  { name:'Ahmed Raza', role:'Backend Lead', dept:'Core Engine', tickets:2, status:'Active' }
+];
+
+let activities = [
+  { time:'10 mins ago', user:'Ayesha Khan', action:'Created ticket TCK-1001 (Login page 500 error)' },
+  { time:'1 hour ago', user:'Hamza Tariq', action:'Updated status of TCK-1003 to In Progress' },
+  { time:'3 hours ago', user:'Zainab Fatima', action:'Resolved ticket TCK-1006' },
+  { time:'Yesterday', user:'Bilal Ahmed', action:'Assigned TCK-1002 to himself' }
+];
+
+let statusFilter = 'all';
+let editingId = null;
+
+function daysAgo(n){ const d = new Date(); d.setDate(d.getDate()-n); return d; }
+function fmtDate(d){ return d.toLocaleDateString('en-GB', {day:'2-digit', month:'short'}); }
+function initials(n){ return n.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase(); }
+
+/* MODAL HANDLERS FOR TOPBAR ICONS */
+function openMessagesModal(){
+  bootstrap.Modal.getOrCreateInstance(document.getElementById('messagesModal')).show();
+}
+
+function openNotificationsModal(){
+  bootstrap.Modal.getOrCreateInstance(document.getElementById('notificationsModal')).show();
+}
+
+function clearNotifDot(){
+  const badges = document.querySelectorAll('.dot-badge');
+  badges.forEach(b => b.style.display = 'none');
+  showToast('Notifications marked as read');
+}
+
+/* VIEW SWITCHER ROUTER */
+function switchView(view){
+  document.querySelectorAll('.view-section').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.nav-link-custom').forEach(n=>n.classList.remove('active'));
+  
+  const targetView = document.getElementById('view-'+view);
+  const targetNav = document.querySelector('.nav-link-custom[data-view="'+view+'"]');
+  
+  if(targetView) targetView.classList.add('active');
+  if(targetNav) targetNav.classList.add('active');
+}
+
+function showToast(msg){
+  document.getElementById('appToastBody').textContent = msg;
+  new bootstrap.Toast(document.getElementById('appToast'), {delay:2000}).show();
+}
+
+/* RENDERING MODULES */
+function renderTickets(){
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const prioF = document.getElementById('priorityFilter').value;
+
+  let list = tickets.filter(t => {
+    if(statusFilter !== 'all' && t.status !== statusFilter) return false;
+    if(prioF !== 'all' && t.priority !== prioF) return false;
+    if(search && !(t.id+' '+t.title+' '+t.assignee).toLowerCase().includes(search)) return false;
+    return true;
+  });
+
+  const body = document.getElementById('ticketTableBody');
+  body.innerHTML = '';
+  document.getElementById('emptyState').style.display = list.length ? 'none' : 'block';
+
+  list.forEach(t => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><span class="mono" style="font-weight:600; color:var(--text-secondary);">${t.id}</span></td>
+      <td><span class="prio-tag prio-${t.priority.toLowerCase()}">${t.priority}</span></td>
+      <td><span class="badge-pill badge-${t.status.toLowerCase().replace(' ','')}"><span class="bdot"></span>${t.status}</span></td>
+      <td><span class="avatar-chip">${initials(t.assignee)}</span> <span style="margin-left:6px; color:var(--text-primary);">${t.assignee}</span></td>
+      <td class="mono" style="color:var(--text-muted); font-size:12px;">${fmtDate(t.created)}</td>
+      <td style="text-align:right;">
+        <button class="btn-icon-sm" onclick="openEditModal('${t.id}')"><i class="bi bi-pencil"></i></button>
+        <button class="btn-icon-sm danger" onclick="confirmDelete('${t.id}')"><i class="bi bi-trash3"></i></button>
+      </td>
+    `;
+    body.appendChild(tr);
+  });
+
+  renderDashboardTickets();
+  updateStats();
+}
+
+function renderDashboardTickets(){
+  const dashBody = document.getElementById('dashTicketBody');
+  dashBody.innerHTML = '';
+  tickets.slice(0, 3).forEach(t => {
+    dashBody.innerHTML += `
+      <tr>
+        <td><span class="mono" style="font-weight:600; color:var(--text-secondary);">${t.id}</span></td>
+        <td><strong>${t.title}</strong></td>
+        <td><span class="prio-tag prio-${t.priority.toLowerCase()}">${t.priority}</span></td>
+        <td><span class="badge-pill badge-${t.status.toLowerCase().replace(' ','')}"><span class="bdot"></span>${t.status}</span></td>
+        <td style="color:var(--text-secondary);">${t.assignee}</td>
+      </tr>
+    `;
+  });
+}
+
+function updateStats(){
+  document.getElementById('statTotal').textContent = tickets.length;
+  document.getElementById('sidebarTicketCount').textContent = tickets.length;
+  document.getElementById('dashActiveTickets').textContent = tickets.filter(t=>t.status!=='Resolved').length;
+  document.getElementById('statOpen').textContent = tickets.filter(t=>t.status==='Open').length;
+  document.getElementById('statProgress').textContent = tickets.filter(t=>t.status==='In Progress').length;
+  document.getElementById('statCritical').textContent = tickets.filter(t=>t.priority==='Critical').length;
+}
+
+function renderProjects(){
+  const grid = document.getElementById('projectsGrid');
+  grid.innerHTML = '';
+  projects.forEach(p => {
+    grid.innerHTML += `
+      <div class="col-md-6">
+        <div class="panel" style="padding:20px;">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h5 style="font-size:16px; font-weight:700; margin:0; color:var(--text-primary);">${p.name}</h5>
+            <span class="badge-pill badge-progress"><span class="bdot"></span>${p.status}</span>
+          </div>
+          <p class="mb-3" style="font-size:12px; color:var(--text-secondary);">Leads: ${p.leads} | ${p.tasks}</p>
+          <div class="metric-label"><span>Progress</span><span>${p.progress}%</span></div>
+          <div class="progress-track"><div class="progress-fill fill-ok" style="width:${p.progress}%; background:var(--brand-primary);"></div></div>
+        </div>
+      </div>
+    `;
+  });
+}
+
+function renderTeam(){
+  const body = document.getElementById('teamTableBody');
+  body.innerHTML = '';
+  teamMembers.forEach(m => {
+    body.innerHTML += `
+      <tr>
+        <td><span class="avatar-chip">${initials(m.name)}</span> <strong style="margin-left:8px;">${m.name}</strong></td>
+        <td style="color:var(--text-secondary);">${m.role}</td>
+        <td style="color:var(--text-secondary);">${m.dept}</td>
+        <td><span class="badge-pill badge-open">${m.tickets} Active</span></td>
+        <td><span class="text-success" style="font-weight:600;">${m.status}</span></td>
+      </tr>
+    `;
+  });
+}
+
+function renderActivity(){
+  const container = document.getElementById('activityStream');
+  container.innerHTML = '';
+  activities.forEach(a => {
+    container.innerHTML += `
+      <div class="d-flex gap-3 mb-3 border-bottom pb-3">
+        <i class="bi bi-clock-history" style="font-size:18px; color:var(--text-muted);"></i>
+        <div>
+          <strong style="color:var(--text-primary);">${a.user}</strong> <span style="color:var(--text-secondary);">${a.action}</span>
+          <div style="font-size:11px; color:var(--text-muted);">${a.time}</div>
+        </div>
+      </div>
+    `;
+  });
+}
+
+function setStatusFilter(f){
+  statusFilter = f;
+  document.querySelectorAll('.chip-filter').forEach(c=>c.classList.remove('active'));
+  document.querySelector('.chip-filter[data-filter="'+f+'"]').classList.add('active');
+  renderTickets();
+}
+
+/* CRUD MODAL ACTIONS */
+function openCreateModal(){
+  editingId = null;
+  document.getElementById('ticketModalTitle').textContent = 'Create Ticket';
+  document.getElementById('ticketForm').reset();
+  bootstrap.Modal.getOrCreateInstance(document.getElementById('ticketModal')).show();
+}
+
+function openEditModal(id){
+  const t = tickets.find(x=>x.id===id);
+  if(!t) return;
+  editingId = id;
+  document.getElementById('ticketModalTitle').textContent = 'Edit Ticket ' + t.id;
+  document.getElementById('fTitle').value = t.title;
+  document.getElementById('fDescription').value = t.description;
+  document.getElementById('fPriority').value = t.priority;
+  document.getElementById('fStatus').value = t.status;
+  document.getElementById('fCategory').value = t.category;
+  document.getElementById('fAssignee').value = t.assignee;
+  bootstrap.Modal.getOrCreateInstance(document.getElementById('ticketModal')).show();
+}
+
+function saveTicket(e){
+  e.preventDefault();
+  const data = {
+    title: document.getElementById('fTitle').value.trim(),
+    description: document.getElementById('fDescription').value.trim(),
+    priority: document.getElementById('fPriority').value,
+    status: document.getElementById('fStatus').value,
+    category: document.getElementById('fCategory').value.trim(),
+    assignee: document.getElementById('fAssignee').value.trim(),
+  };
+
+  if(editingId){
+    const t = tickets.find(x=>x.id===editingId);
+    Object.assign(t, data);
+    activities.unshift({ time:'Just now', user:'You', action:`Updated ticket ${editingId}` });
+    showToast(`${editingId} updated.`);
+  } else {
+    ticketSeq++;
+    const newId = 'TCK-' + ticketSeq;
+    tickets.unshift({ id: newId, ...data, created: new Date() });
+    activities.unshift({ time:'Just now', user:'You', action:`Created ticket ${newId}` });
+    showToast(`${newId} created.`);
+  }
+
+  bootstrap.Modal.getOrCreateInstance(document.getElementById('ticketModal')).hide();
+  renderTickets();
+  renderActivity();
+}
+
+function confirmDelete(id){
+  if(confirm(`Delete ${id}?`)){
+    tickets = tickets.filter(x=>x.id!==id);
+    renderTickets();
+    showToast(`${id} deleted.`);
+  }
+}
+
+/* SERVER SYSTEM & METRICS */
+let servers = [
+  { name:'app-prod-01', cpu:42 },
+  { name:'db-primary', cpu:78 },
+  { name:'staging-app', cpu:88 }
+];
+
+function renderServers(){
+  const grid = document.getElementById('serverGrid');
+  grid.innerHTML = '';
+  let healthy=0, warning=0, critical=0, cpuSum=0;
+
+  servers.forEach(s => {
+    const level = s.cpu >= 85 ? 'critical' : s.cpu >= 65 ? 'warning' : 'healthy';
+    if(level==='healthy') healthy++; else if(level==='warning') warning++; else critical++;
+    cpuSum += s.cpu;
+
+    const col = document.createElement('div');
+    col.className = 'col-md-4';
+    col.innerHTML = `
+      <div class="server-card">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <strong>${s.name}</strong>
+          <span class="health-dot ${level}"></span>
+        </div>
+        <div class="metric-row">
+          <div class="metric-label"><span>CPU Utilization</span><span>${Math.round(s.cpu)}%</span></div>
+          <div class="progress-track"><div class="progress-fill ${s.cpu>=85?'fill-crit':s.cpu>=65?'fill-warn':'fill-ok'}" style="width:${s.cpu}%"></div></div>
+        </div>
+      </div>
+    `;
+    grid.appendChild(col);
+  });
+
+  document.getElementById('srvHealthy').textContent = healthy;
+  document.getElementById('srvWarning').textContent = warning;
+  document.getElementById('srvCritical').textContent = critical;
+  document.getElementById('srvAvgCpu').textContent = Math.round(cpuSum/servers.length) + '%';
+}
+
+function initCharts(){
+  const ctxDash = document.getElementById('dashOverviewChart').getContext('2d');
+  const gradient = ctxDash.createLinearGradient(0, 0, 0, 260);
+  gradient.addColorStop(0, 'rgba(24, 118, 102, 0.25)');
+  gradient.addColorStop(1, 'rgba(24, 118, 102, 0.0)');
+
+  new Chart(ctxDash, {
+    type: 'line',
+    data: {
+      labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      datasets: [{
+        label: 'Requests (k)',
+        data: [14, 22, 18, 29, 25, 36, 32],
+        borderColor: '#187666',
+        borderWidth: 3,
+        backgroundColor: gradient,
+        fill: true,
+        tension: 0.35,
+        pointBackgroundColor: '#187666',
+        pointRadius: 4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: { color: '#F1F5F9' } }
+      }
+    }
+  });
+
+  const ctx1 = document.getElementById('cpuLineChart').getContext('2d');
+  new Chart(ctx1, {
+    type: 'line',
+    data: { labels: [1,2,3,4,5], datasets: [{ label: 'Avg CPU Load', data: [30,45,60,50,65], borderColor: '#187666', tension: 0.3 }] },
+    options: { responsive: true, maintainAspectRatio: false }
+  });
+
+  const ctx2 = document.getElementById('resourceDonut').getContext('2d');
+  new Chart(ctx2, {
+    type: 'doughnut',
+    data: { labels: ['Healthy', 'Warning', 'Critical'], datasets: [{ data: [1,1,1], backgroundColor: ['#16A34A','#D97706','#DC2626'] }] },
+    options: { responsive: true, maintainAspectRatio: false }
+  });
+}
+
+let liveFeedOn = true;
+function toggleLiveFeed(){
+  liveFeedOn = !liveFeedOn;
+  document.getElementById('liveFeedLabel').textContent = liveFeedOn ? 'Pause Live Feed' : 'Resume Live Feed';
+}
+
+/* SYSTEM INITIALIZATION */
+document.addEventListener('DOMContentLoaded', ()=>{
+  renderTickets();
+  renderProjects();
+  renderTeam();
+  renderActivity();
+  renderServers();
+  initCharts();
+});
+</script>
+</body>
+</html>
