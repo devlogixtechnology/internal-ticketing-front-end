@@ -1,0 +1,4677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Onboarding & Whitelist UI | Internal Ticketing Hub</title>
+
+<link
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
+    rel="stylesheet"
+>
+
+<link
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"
+    rel="stylesheet"
+>
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet"
+>
+
+<style>
+
+/* =========================================================
+   DESIGN TOKENS
+========================================================= */
+
+:root{
+    --text-primary:#2C3E50;
+    --text-secondary:#5F6B73;
+    --text-muted:#849099;
+    --text-on-dark:#FFFFFF;
+
+    --link:#187666;
+    --link-hover:#125B50;
+
+    --bg-body:#F5F8F8;
+    --bg-sidebar:#FFFFFF;
+    --bg-card:#FFFFFF;
+
+    --border-line:#E3E9E9;
+    --border-soft:#EDF1F1;
+
+    --accent:#187666;
+    --accent-hover:#126456;
+    --accent-soft:#E7F3F0;
+
+    --success-bg:#E8F6EF;
+    --success:#1D8A5B;
+
+    --warning-bg:#FFF5DF;
+    --warning:#B5790D;
+
+    --danger-bg:#FCEAEA;
+    --danger:#C0392B;
+
+    --info-bg:#EAF2FA;
+    --info:#3E7CB1;
+
+    --shadow-sm:0 2px 8px rgba(44,62,80,.04);
+    --shadow-md:0 8px 24px rgba(44,62,80,.07);
+}
+
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+*{
+    box-sizing:border-box;
+}
+
+html,
+body{
+    min-height:100%;
+}
+
+body{
+    margin:0;
+    background:var(--bg-body);
+    color:var(--text-primary);
+    font-family:'Inter',sans-serif;
+    font-size:14px;
+}
+
+.display{
+    font-family:'Plus Jakarta Sans',sans-serif;
+}
+
+.mono{
+    font-family:'JetBrains Mono',monospace;
+}
+
+a{
+    color:var(--link);
+    text-decoration:none;
+}
+
+a:hover{
+    color:var(--link-hover);
+}
+
+button,
+input,
+select{
+    font-family:inherit;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible{
+    outline:3px solid rgba(24,118,102,.15);
+    outline-offset:1px;
+}
+
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar{
+    width:7px;
+    height:7px;
+}
+
+::-webkit-scrollbar-track{
+    background:transparent;
+}
+
+::-webkit-scrollbar-thumb{
+    background:#CDD7D7;
+    border-radius:10px;
+}
+
+
+/* =========================================================
+   APPLICATION SHELL
+========================================================= */
+
+.app-shell{
+    min-height:100vh;
+    display:flex;
+}
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.sidebar{
+    width:242px;
+    flex-shrink:0;
+    height:100vh;
+    position:sticky;
+    top:0;
+
+    background:var(--bg-sidebar);
+    border-right:1px solid var(--border-line);
+
+    display:flex;
+    flex-direction:column;
+
+    transition:.25s ease;
+    z-index:100;
+}
+
+.brand{
+    height:72px;
+    padding:0 20px;
+
+    display:flex;
+    align-items:center;
+    gap:11px;
+
+    border-bottom:1px solid var(--border-soft);
+}
+
+.brand-logo{
+    width:37px;
+    height:37px;
+
+    border-radius:10px;
+
+    background:var(--accent);
+    color:#fff;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-family:'Plus Jakarta Sans',sans-serif;
+    font-weight:800;
+    font-size:14px;
+
+    box-shadow:0 5px 12px rgba(24,118,102,.18);
+}
+
+.brand-name{
+    font-family:'Plus Jakarta Sans',sans-serif;
+    font-weight:800;
+    font-size:13.5px;
+    line-height:1.2;
+    color:var(--text-primary);
+}
+
+.brand-sub{
+    color:var(--text-muted);
+    font-size:10.5px;
+    margin-top:3px;
+}
+
+
+/* navigation */
+
+.nav-group{
+    padding:18px 12px 4px;
+}
+
+.nav-label{
+    padding:0 10px 8px;
+
+    font-size:10px;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:.09em;
+
+    color:var(--text-muted);
+}
+
+.nav-link-custom{
+    position:relative;
+
+    display:flex;
+    align-items:center;
+    gap:11px;
+
+    padding:10px 11px;
+    margin-bottom:3px;
+
+    border-radius:9px;
+
+    color:var(--text-secondary);
+
+    font-size:13px;
+    font-weight:500;
+
+    cursor:pointer;
+
+    transition:.15s ease;
+}
+
+.nav-link-custom i{
+    width:19px;
+
+    text-align:center;
+
+    font-size:15px;
+
+    color:var(--text-muted);
+}
+
+.nav-link-custom:hover{
+    background:#F3F7F7;
+    color:var(--text-primary);
+}
+
+.nav-link-custom:hover i{
+    color:var(--text-secondary);
+}
+
+.nav-link-custom.active{
+    background:var(--accent-soft);
+    color:var(--link);
+    font-weight:700;
+}
+
+.nav-link-custom.active i{
+    color:var(--link);
+}
+
+.nav-badge{
+    margin-left:auto;
+
+    min-width:25px;
+
+    padding:2px 7px;
+
+    text-align:center;
+
+    border-radius:20px;
+
+    background:var(--accent);
+    color:#fff;
+
+    font-size:10px;
+    font-weight:800;
+}
+
+.nav-dot{
+    width:6px;
+    height:6px;
+
+    border-radius:50%;
+
+    background:var(--accent);
+
+    position:absolute;
+    right:12px;
+}
+
+
+/* sidebar bottom */
+
+.sidebar-footer{
+    margin-top:auto;
+
+    padding:15px 17px;
+
+    border-top:1px solid var(--border-soft);
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.user-avatar{
+    width:34px;
+    height:34px;
+
+    border-radius:50%;
+
+    background:var(--accent-soft);
+    color:var(--link);
+
+    border:1px solid #D3E9E4;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:11px;
+    font-weight:800;
+}
+
+.user-name{
+    font-size:12px;
+    font-weight:700;
+    color:var(--text-primary);
+}
+
+.user-role{
+    margin-top:2px;
+    font-size:10.5px;
+    color:var(--text-muted);
+}
+
+
+/* =========================================================
+   MAIN AREA
+========================================================= */
+
+.main-area{
+    flex:1;
+    min-width:0;
+}
+
+
+/* =========================================================
+   TOPBAR
+========================================================= */
+
+.topbar{
+    position:sticky;
+    top:0;
+    z-index:50;
+
+    background:rgba(255,255,255,.97);
+
+    border-bottom:1px solid var(--border-line);
+
+    padding:16px 30px 0;
+
+    backdrop-filter:blur(10px);
+}
+
+.mobile-menu{
+    margin-bottom:10px;
+}
+
+
+/* breadcrumb */
+
+.breadcrumb-custom{
+    display:flex;
+    align-items:center;
+    gap:7px;
+
+    margin-bottom:10px;
+
+    font-size:11.5px;
+    color:var(--text-muted);
+}
+
+.breadcrumb-custom a{
+    color:var(--text-muted);
+    font-weight:500;
+}
+
+.breadcrumb-custom a:hover{
+    color:var(--link);
+}
+
+.breadcrumb-custom i{
+    font-size:11px;
+}
+
+.breadcrumb-custom .current{
+    color:var(--text-secondary);
+    font-weight:700;
+}
+
+
+/* page heading */
+
+.page-head{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+
+    gap:20px;
+
+    padding-bottom:18px;
+}
+
+.page-title{
+    margin:0;
+
+    font-family:'Plus Jakarta Sans',sans-serif;
+    font-size:23px;
+    line-height:1.25;
+    font-weight:800;
+
+    letter-spacing:-.025em;
+
+    color:var(--text-primary);
+}
+
+.page-description{
+    margin:6px 0 0;
+
+    color:var(--text-muted);
+
+    font-size:12.5px;
+    line-height:1.6;
+}
+
+.page-actions{
+    display:flex;
+    gap:9px;
+    flex-wrap:wrap;
+}
+
+
+/* buttons */
+
+.btn-primary-custom{
+    border:0;
+
+    background:var(--accent);
+    color:#fff;
+
+    border-radius:8px;
+
+    padding:9px 15px;
+
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:7px;
+
+    font-size:12.5px;
+    font-weight:700;
+
+    transition:.15s ease;
+}
+
+.btn-primary-custom:hover{
+    background:var(--accent-hover);
+    color:#fff;
+    transform:translateY(-1px);
+}
+
+.btn-outline-custom{
+    border:1px solid var(--border-line);
+
+    background:#fff;
+    color:var(--text-secondary);
+
+    border-radius:8px;
+
+    padding:9px 14px;
+
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:7px;
+
+    font-size:12.5px;
+    font-weight:700;
+
+    transition:.15s ease;
+}
+
+.btn-outline-custom:hover{
+    background:#F6F9F9;
+    color:var(--text-primary);
+}
+
+.btn-icon{
+    width:32px;
+    height:32px;
+
+    border:1px solid var(--border-line);
+
+    background:#fff;
+
+    color:var(--text-secondary);
+
+    border-radius:8px;
+
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+
+    transition:.15s ease;
+}
+
+.btn-icon:hover{
+    background:#F4F8F8;
+    color:var(--text-primary);
+}
+
+.btn-icon.danger:hover{
+    color:var(--danger);
+    border-color:#F0CACA;
+}
+
+
+/* =========================================================
+   TABS
+========================================================= */
+
+.tab-strip{
+    display:flex;
+    gap:28px;
+
+    border-bottom:1px solid var(--border-line);
+}
+
+.tab-btn{
+    position:relative;
+
+    padding:10px 2px 12px;
+
+    border:0;
+    background:none;
+
+    color:var(--text-muted);
+
+    font-size:12.5px;
+    font-weight:700;
+
+    cursor:pointer;
+}
+
+.tab-btn::after{
+    content:"";
+
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:-1px;
+
+    height:2px;
+
+    background:transparent;
+
+    border-radius:2px;
+}
+
+.tab-btn:hover{
+    color:var(--text-secondary);
+}
+
+.tab-btn.active{
+    color:var(--link);
+}
+
+.tab-btn.active::after{
+    background:var(--link);
+}
+
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.content-pad{
+    padding:25px 30px 55px;
+}
+
+.view-pane{
+    display:none;
+}
+
+.view-pane.active{
+    display:block;
+    animation:fadeIn .2s ease;
+}
+
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(4px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+
+/* =========================================================
+   PANEL
+========================================================= */
+
+.panel{
+    background:#fff;
+
+    border:1px solid var(--border-line);
+
+    border-radius:13px;
+
+    box-shadow:var(--shadow-sm);
+}
+
+.panel-header{
+    padding:18px 20px;
+
+    border-bottom:1px solid var(--border-soft);
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    gap:15px;
+}
+
+.panel-title{
+    margin:0;
+
+    font-family:'Plus Jakarta Sans',sans-serif;
+
+    font-size:14px;
+    font-weight:800;
+
+    color:var(--text-primary);
+}
+
+.panel-subtitle{
+    margin:4px 0 0;
+
+    font-size:11.5px;
+    color:var(--text-muted);
+}
+
+
+/* =========================================================
+   ONBOARDING HERO
+========================================================= */
+
+.onboarding-hero{
+    padding:22px;
+
+    margin-bottom:17px;
+
+    border-radius:13px;
+
+    background:
+        linear-gradient(
+            120deg,
+            #F1F8F6 0%,
+            #FFFFFF 70%
+        );
+
+    border:1px solid #DDEBE8;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    gap:20px;
+}
+
+.hero-left{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.hero-icon{
+    width:46px;
+    height:46px;
+
+    flex-shrink:0;
+
+    border-radius:12px;
+
+    background:var(--accent);
+    color:#fff;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:20px;
+
+    box-shadow:0 7px 16px rgba(24,118,102,.17);
+}
+
+.hero-title{
+    margin:0;
+
+    font-family:'Plus Jakarta Sans',sans-serif;
+
+    font-size:15px;
+    font-weight:800;
+
+    color:var(--text-primary);
+}
+
+.hero-text{
+    margin:4px 0 0;
+
+    font-size:11.5px;
+    color:var(--text-secondary);
+}
+
+.hero-status{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+
+    padding:6px 10px;
+
+    border-radius:20px;
+
+    background:var(--success-bg);
+    color:var(--success);
+
+    font-size:10.5px;
+    font-weight:800;
+
+    white-space:nowrap;
+}
+
+.hero-status span{
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:currentColor;
+}
+
+
+/* =========================================================
+   STEPPER
+========================================================= */
+
+.stepper{
+    display:flex;
+    align-items:flex-start;
+
+    padding:22px 20px 4px;
+
+    margin-bottom:20px;
+}
+
+.step-item{
+    flex:1;
+
+    text-align:center;
+
+    position:relative;
+}
+
+.step-item:not(:last-child)::after{
+    content:"";
+
+    position:absolute;
+
+    top:16px;
+    left:58%;
+
+    width:84%;
+    height:2px;
+
+    background:var(--border-line);
+
+    z-index:0;
+}
+
+.step-item.done:not(:last-child)::after{
+    background:var(--accent);
+}
+
+.step-circle{
+    position:relative;
+    z-index:2;
+
+    width:32px;
+    height:32px;
+
+    margin:0 auto 8px;
+
+    border-radius:50%;
+
+    border:2px solid var(--border-line);
+
+    background:#fff;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    color:var(--text-muted);
+
+    font-size:12px;
+    font-weight:800;
+
+    transition:.2s ease;
+}
+
+.step-item.active .step-circle{
+    border-color:var(--accent);
+    background:var(--accent-soft);
+    color:var(--accent);
+}
+
+.step-item.done .step-circle{
+    border-color:var(--accent);
+    background:var(--accent);
+    color:#fff;
+}
+
+.step-label{
+    font-size:10.5px;
+    font-weight:700;
+
+    color:var(--text-muted);
+}
+
+.step-item.active .step-label{
+    color:var(--text-primary);
+}
+
+.step-item.done .step-label{
+    color:var(--text-secondary);
+}
+
+
+/* progress */
+
+.progress-wrapper{
+    padding:0 20px 20px;
+}
+
+.progress{
+    height:4px;
+    background:#EDF1F1;
+    border-radius:10px;
+}
+
+.progress-bar{
+    background:var(--accent);
+    border-radius:10px;
+    transition:.25s ease;
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.form-section{
+    padding:22px 24px;
+}
+
+.section-heading{
+    display:flex;
+    align-items:flex-start;
+    gap:11px;
+
+    margin-bottom:20px;
+}
+
+.section-icon{
+    width:34px;
+    height:34px;
+
+    flex-shrink:0;
+
+    border-radius:9px;
+
+    background:var(--accent-soft);
+    color:var(--accent);
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:15px;
+}
+
+.section-heading h3{
+    margin:0;
+
+    font-family:'Plus Jakarta Sans',sans-serif;
+
+    font-size:14px;
+    font-weight:800;
+}
+
+.section-heading p{
+    margin:3px 0 0;
+
+    font-size:11px;
+    color:var(--text-muted);
+}
+
+.form-label-custom{
+    display:block;
+
+    margin-bottom:6px;
+
+    font-size:11.5px;
+    font-weight:700;
+
+    color:var(--text-secondary);
+}
+
+.form-control-custom,
+.form-select-custom{
+    width:100%;
+
+    border:1px solid var(--border-line);
+
+    background:#FCFEFE;
+
+    color:var(--text-primary);
+
+    border-radius:8px;
+
+    padding:9px 11px;
+
+    font-size:12.5px;
+
+    transition:.15s ease;
+}
+
+.form-control-custom::placeholder{
+    color:#A1AAAE;
+}
+
+.form-control-custom:hover,
+.form-select-custom:hover{
+    border-color:#CDD8D8;
+}
+
+.form-control-custom:focus,
+.form-select-custom:focus{
+    outline:none;
+
+    border-color:var(--accent);
+
+    background:#fff;
+
+    box-shadow:0 0 0 3px rgba(24,118,102,.09);
+}
+
+.form-hint{
+    margin-top:5px;
+
+    color:var(--text-muted);
+
+    font-size:10.5px;
+
+    line-height:1.5;
+}
+
+
+/* =========================================================
+   CHECKBOX CARDS
+========================================================= */
+
+.check-row{
+    display:flex;
+    align-items:flex-start;
+    gap:11px;
+
+    padding:13px 14px;
+
+    margin-bottom:9px;
+
+    border:1px solid var(--border-line);
+
+    border-radius:9px;
+
+    background:#fff;
+
+    cursor:pointer;
+
+    transition:.15s ease;
+}
+
+.check-row:hover{
+    border-color:#C9D8D6;
+    background:#FBFDFD;
+}
+
+.check-row input{
+    margin-top:3px;
+
+    width:15px;
+    height:15px;
+
+    accent-color:var(--accent);
+}
+
+.check-row .crt{
+    font-size:12.5px;
+    font-weight:700;
+
+    color:var(--text-primary);
+}
+
+.check-row .crd{
+    margin-top:2px;
+
+    font-size:10.5px;
+    color:var(--text-muted);
+}
+
+
+/* =========================================================
+   REVIEW
+========================================================= */
+
+.review-block{
+    padding:15px 17px;
+
+    margin-bottom:10px;
+
+    border:1px solid var(--border-line);
+
+    border-radius:10px;
+
+    background:#FCFEFE;
+}
+
+.review-block h6{
+    margin:0 0 9px;
+
+    font-family:'Plus Jakarta Sans',sans-serif;
+
+    font-size:12.5px;
+    font-weight:800;
+
+    color:var(--text-primary);
+}
+
+.review-block h6 i{
+    margin-right:6px;
+    color:var(--accent);
+}
+
+.review-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    gap:20px;
+
+    padding:6px 0;
+
+    border-bottom:1px dashed var(--border-soft);
+
+    font-size:11.5px;
+}
+
+.review-row:last-child{
+    border-bottom:0;
+}
+
+.review-row .rk{
+    color:var(--text-muted);
+}
+
+.review-row .rv{
+    color:var(--text-primary);
+    font-weight:600;
+
+    text-align:right;
+}
+
+
+/* =========================================================
+   WIZARD FOOTER
+========================================================= */
+
+.wizard-footer{
+    padding:17px 24px;
+
+    border-top:1px solid var(--border-soft);
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    gap:15px;
+}
+
+.step-counter{
+    color:var(--text-muted);
+    font-size:11px;
+}
+
+.step-counter strong{
+    color:var(--text-secondary);
+}
+
+
+/* =========================================================
+   WHITELIST STATS
+========================================================= */
+
+.stat-card{
+    height:100%;
+
+    padding:17px;
+
+    background:#fff;
+
+    border:1px solid var(--border-line);
+
+    border-radius:12px;
+
+    box-shadow:var(--shadow-sm);
+
+    transition:.15s ease;
+}
+
+.stat-card:hover{
+    transform:translateY(-2px);
+    box-shadow:var(--shadow-md);
+}
+
+.stat-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    margin-bottom:12px;
+}
+
+.stat-icon{
+    width:34px;
+    height:34px;
+
+    border-radius:9px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:15px;
+}
+
+.stat-icon.green{
+    background:var(--success-bg);
+    color:var(--success);
+}
+
+.stat-icon.yellow{
+    background:var(--warning-bg);
+    color:var(--warning);
+}
+
+.stat-icon.red{
+    background:var(--danger-bg);
+    color:var(--danger);
+}
+
+.stat-icon.blue{
+    background:var(--info-bg);
+    color:var(--info);
+}
+
+.stat-label{
+    font-size:10px;
+
+    text-transform:uppercase;
+    letter-spacing:.06em;
+
+    color:var(--text-muted);
+
+    font-weight:800;
+}
+
+.stat-value{
+    margin-top:3px;
+
+    font-family:'Plus Jakarta Sans',sans-serif;
+
+    font-size:24px;
+    font-weight:800;
+
+    color:var(--text-primary);
+}
+
+.stat-caption{
+    margin-top:3px;
+
+    font-size:10.5px;
+
+    color:var(--text-muted);
+}
+
+
+/* =========================================================
+   TOOLBAR
+========================================================= */
+
+.toolbar{
+    padding:15px 18px;
+
+    display:flex;
+    align-items:center;
+
+    gap:9px;
+    flex-wrap:wrap;
+
+    border-bottom:1px solid var(--border-line);
+}
+
+.search-wrap{
+    position:relative;
+
+    width:280px;
+}
+
+.search-wrap i{
+    position:absolute;
+
+    left:11px;
+    top:50%;
+
+    transform:translateY(-50%);
+
+    color:var(--text-muted);
+
+    font-size:13px;
+}
+
+.search-input{
+    width:100%;
+
+    padding:8px 11px 8px 32px;
+
+    border:1px solid var(--border-line);
+
+    border-radius:8px;
+
+    background:#FCFEFE;
+
+    color:var(--text-primary);
+
+    font-size:12px;
+}
+
+.search-input:focus{
+    outline:none;
+
+    border-color:var(--accent);
+
+    box-shadow:0 0 0 3px rgba(24,118,102,.08);
+}
+
+.filter-select{
+    min-width:135px;
+
+    padding:8px 10px;
+
+    border:1px solid var(--border-line);
+
+    border-radius:8px;
+
+    background:#fff;
+
+    color:var(--text-secondary);
+
+    font-size:11.5px;
+
+    font-weight:600;
+}
+
+.toolbar-spacer{
+    margin-left:auto;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.table-wrapper{
+    overflow-x:auto;
+}
+
+.wl-table{
+    width:100%;
+
+    border-collapse:separate;
+    border-spacing:0;
+}
+
+.wl-table th{
+    padding:11px 18px;
+
+    background:#FAFCFC;
+
+    border-bottom:1px solid var(--border-line);
+
+    color:var(--text-muted);
+
+    font-size:9.5px;
+    font-weight:800;
+
+    text-transform:uppercase;
+    letter-spacing:.06em;
+
+    white-space:nowrap;
+}
+
+.wl-table td{
+    padding:13px 18px;
+
+    border-bottom:1px solid var(--border-soft);
+
+    color:var(--text-secondary);
+
+    font-size:11.5px;
+
+    vertical-align:middle;
+}
+
+.wl-table tbody tr{
+    transition:.12s ease;
+}
+
+.wl-table tbody tr:hover{
+    background:#FBFDFD;
+}
+
+.wl-table tbody tr:last-child td{
+    border-bottom:none;
+}
+
+.wl-value{
+    color:var(--text-primary);
+
+    font-family:'JetBrains Mono',monospace;
+
+    font-size:11px;
+    font-weight:600;
+}
+
+.wl-id{
+    margin-top:3px;
+
+    color:var(--text-muted);
+
+    font-family:'JetBrains Mono',monospace;
+
+    font-size:9px;
+}
+
+
+/* =========================================================
+   CHIPS
+========================================================= */
+
+.type-chip{
+    display:inline-flex;
+    align-items:center;
+
+    padding:4px 8px;
+
+    border-radius:6px;
+
+    background:#F1F4F4;
+
+    color:var(--text-secondary);
+
+    font-size:9.5px;
+    font-weight:800;
+}
+
+.status-pill{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+
+    padding:4px 9px;
+
+    border-radius:20px;
+
+    font-size:9.5px;
+    font-weight:800;
+}
+
+.status-pill .dot{
+    width:5px;
+    height:5px;
+
+    border-radius:50%;
+}
+
+.status-active{
+    background:var(--success-bg);
+    color:var(--success);
+}
+
+.status-active .dot{
+    background:var(--success);
+}
+
+.status-pending{
+    background:var(--warning-bg);
+    color:var(--warning);
+}
+
+.status-pending .dot{
+    background:var(--warning);
+}
+
+.status-blocked{
+    background:var(--danger-bg);
+    color:var(--danger);
+}
+
+.status-blocked .dot{
+    background:var(--danger);
+}
+
+
+/* =========================================================
+   SWITCH
+========================================================= */
+
+.switch{
+    position:relative;
+
+    width:34px;
+    height:19px;
+
+    display:inline-block;
+}
+
+.switch input{
+    opacity:0;
+
+    width:0;
+    height:0;
+}
+
+.slider{
+    position:absolute;
+    inset:0;
+
+    background:#D6DEDE;
+
+    border-radius:20px;
+
+    cursor:pointer;
+
+    transition:.15s;
+}
+
+.slider::before{
+    content:"";
+
+    position:absolute;
+
+    width:13px;
+    height:13px;
+
+    left:3px;
+    top:3px;
+
+    background:#fff;
+
+    border-radius:50%;
+
+    box-shadow:0 1px 3px rgba(0,0,0,.2);
+
+    transition:.15s;
+}
+
+.switch input:checked + .slider{
+    background:var(--accent);
+}
+
+.switch input:checked + .slider::before{
+    transform:translateX(15px);
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.empty-state{
+    padding:55px 20px;
+
+    text-align:center;
+
+    display:none;
+}
+
+.empty-icon{
+    width:48px;
+    height:48px;
+
+    margin:0 auto 12px;
+
+    border-radius:12px;
+
+    background:#F1F5F5;
+
+    color:#AEB9B9;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:20px;
+}
+
+.empty-state h5{
+    margin:0;
+
+    font-family:'Plus Jakarta Sans',sans-serif;
+
+    font-size:13px;
+    font-weight:800;
+
+    color:var(--text-primary);
+}
+
+.empty-state p{
+    margin:5px 0 0;
+
+    color:var(--text-muted);
+
+    font-size:11px;
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.modal-content{
+    border:1px solid var(--border-line);
+
+    border-radius:13px;
+
+    overflow:hidden;
+
+    box-shadow:0 20px 50px rgba(44,62,80,.16);
+}
+
+.modal-header{
+    padding:17px 20px;
+
+    border-bottom:1px solid var(--border-line);
+}
+
+.modal-title{
+    margin:0;
+
+    font-family:'Plus Jakarta Sans',sans-serif;
+
+    font-size:14px;
+    font-weight:800;
+
+    color:var(--text-primary);
+}
+
+.modal-body{
+    padding:20px;
+}
+
+.modal-footer{
+    padding:14px 20px;
+
+    border-top:1px solid var(--border-line);
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast-custom{
+    background:#fff;
+
+    border:1px solid var(--border-line);
+
+    border-left:3px solid var(--accent);
+
+    border-radius:8px;
+
+    box-shadow:var(--shadow-md);
+}
+
+.toast-body{
+    color:var(--text-primary);
+
+    font-size:12px;
+    font-weight:600;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1000px){
+
+    .sidebar{
+        position:fixed;
+        left:-242px;
+        top:0;
+        bottom:0;
+
+        box-shadow:20px 0 45px rgba(0,0,0,.13);
+    }
+
+    .sidebar.open{
+        left:0;
+    }
+
+    .topbar{
+        padding:14px 18px 0;
+    }
+
+    .content-pad{
+        padding:20px 18px 45px;
+    }
+
+    .page-title{
+        font-size:20px;
+    }
+
+    .onboarding-hero{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+    .hero-status{
+        margin-left:60px;
+    }
+}
+
+@media(max-width:700px){
+
+    .page-head{
+        flex-direction:column;
+    }
+
+    .page-actions{
+        width:100%;
+    }
+
+    .page-actions button{
+        flex:1;
+    }
+
+    .search-wrap{
+        width:100%;
+    }
+
+    .filter-select{
+        flex:1;
+        min-width:120px;
+    }
+
+    .toolbar-spacer{
+        display:none;
+    }
+
+    .step-label{
+        font-size:9px;
+    }
+
+    .step-item:not(:last-child)::after{
+        width:78%;
+        left:61%;
+    }
+
+    .form-section{
+        padding:18px;
+    }
+
+    .wizard-footer{
+        padding:15px 18px;
+    }
+}
+
+@media(max-width:500px){
+
+    .tab-strip{
+        gap:17px;
+    }
+
+    .tab-btn{
+        font-size:11px;
+    }
+
+    .page-title{
+        font-size:18px;
+    }
+
+    .hero-left{
+        align-items:flex-start;
+    }
+
+    .hero-status{
+        margin-left:0;
+    }
+
+    .wizard-footer{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .wizard-footer > div:last-child{
+        width:100%;
+        justify-content:space-between;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app-shell">
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<aside class="sidebar" id="sidebar">
+
+    <div class="brand">
+
+        <div class="brand-logo">
+            IH
+        </div>
+
+        <div>
+            <div class="brand-name">
+                Internal Ticketing Hub
+            </div>
+
+            <div class="brand-sub">
+                Engineering Workspace
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- Workspace -->
+
+    <div class="nav-group">
+
+        <div class="nav-label">
+            Workspace
+        </div>
+
+        <a class="nav-link-custom"
+           onclick="selectNav(this)">
+
+            <i class="bi bi-speedometer2"></i>
+
+            Dashboard
+        </a>
+
+        <a class="nav-link-custom active"
+           onclick="selectNav(this)">
+
+            <i class="bi bi-ticket-perforated"></i>
+
+            Tickets
+
+            <span class="nav-badge">
+                24
+            </span>
+
+        </a>
+
+        <a class="nav-link-custom"
+           onclick="selectNav(this)">
+
+            <i class="bi bi-folder2"></i>
+
+            Projects
+        </a>
+
+        <a class="nav-link-custom"
+           onclick="selectNav(this)">
+
+            <i class="bi bi-people"></i>
+
+            Team
+        </a>
+
+    </div>
+
+
+    <!-- Management -->
+
+    <div class="nav-group">
+
+        <div class="nav-label">
+            Management
+        </div>
+
+        <a class="nav-link-custom"
+           onclick="selectNav(this)">
+
+            <i class="bi bi-bar-chart-line"></i>
+
+            Reports
+        </a>
+
+        <a class="nav-link-custom"
+           onclick="selectNav(this)"
+           style="position:relative;">
+
+            <i class="bi bi-clock-history"></i>
+
+            Activity
+
+            <span class="nav-dot"></span>
+
+        </a>
+
+        <a class="nav-link-custom"
+           onclick="selectNav(this)">
+
+            <i class="bi bi-gear"></i>
+
+            Settings
+
+        </a>
+
+    </div>
+
+
+    <!-- User -->
+
+    <div class="sidebar-footer">
+
+        <div class="user-avatar">
+            TA
+        </div>
+
+        <div>
+            <div class="user-name">
+                Tanveer Alam
+            </div>
+
+            <div class="user-role">
+                Frontend Engineer
+            </div>
+        </div>
+
+    </div>
+
+</aside>
+
+
+<!-- =====================================================
+     MAIN AREA
+===================================================== -->
+
+<div class="main-area">
+
+
+<!-- =====================================================
+     TOPBAR
+===================================================== -->
+
+<header class="topbar">
+
+    <button
+        class="btn-icon mobile-menu d-lg-none"
+        onclick="toggleSidebar()"
+        aria-label="Open navigation">
+
+        <i class="bi bi-list"></i>
+
+    </button>
+
+
+    <!-- Breadcrumb
+         FE-2 COMPLETELY REMOVED
+    -->
+
+    <div class="breadcrumb-custom">
+
+        <a href="#">
+            Tickets
+        </a>
+
+        <i class="bi bi-chevron-right"></i>
+
+        <span class="current">
+            Onboarding &amp; Whitelist UI
+        </span>
+
+    </div>
+
+
+    <div class="page-head">
+
+        <div>
+
+            <h1 class="page-title">
+                Onboarding &amp; Whitelist UI
+            </h1>
+
+            <p class="page-description">
+                Configure a new organization, invite its administrator,
+                and manage trusted domains, emails, and IP addresses.
+            </p>
+
+        </div>
+
+
+        <div class="page-actions">
+
+            <button
+                class="btn-outline-custom"
+                onclick="showToast('Comments panel opened.')">
+
+                <i class="bi bi-chat-left-text"></i>
+
+                Comments
+
+                <span class="mono">
+                    12
+                </span>
+
+            </button>
+
+            <button
+                class="btn-primary-custom"
+                onclick="markComplete()">
+
+                <i class="bi bi-check2-circle"></i>
+
+                Mark complete
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- Tabs -->
+
+    <div class="tab-strip">
+
+        <button
+            class="tab-btn active"
+            data-tab="onboarding"
+            onclick="switchTab('onboarding')">
+
+            <i class="bi bi-person-plus me-1"></i>
+
+            Onboarding Flow
+
+        </button>
+
+        <button
+            class="tab-btn"
+            data-tab="whitelist"
+            onclick="switchTab('whitelist')">
+
+            <i class="bi bi-shield-check me-1"></i>
+
+            Whitelist Management
+
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+     CONTENT
+===================================================== -->
+
+<main class="content-pad">
+
+
+<!-- =====================================================
+     ONBOARDING TAB
+===================================================== -->
+
+<section
+    class="view-pane active"
+    id="pane-onboarding">
+
+
+    <!-- Hero -->
+
+    <div class="onboarding-hero">
+
+        <div class="hero-left">
+
+            <div class="hero-icon">
+
+                <i class="bi bi-buildings"></i>
+
+            </div>
+
+            <div>
+
+                <h2 class="hero-title">
+                    New organization onboarding
+                </h2>
+
+                <p class="hero-text">
+                    Complete the setup in four simple steps.
+                    You can review everything before launching.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="hero-status">
+
+            <span></span>
+
+            Ready to configure
+
+        </div>
+
+    </div>
+
+
+    <!-- Wizard Panel -->
+
+    <div class="panel">
+
+
+        <!-- Stepper -->
+
+        <div class="stepper" id="stepper"></div>
+
+
+        <!-- Progress -->
+
+        <div class="progress-wrapper">
+
+            <div class="progress">
+
+                <div
+                    class="progress-bar"
+                    id="wizardProgress"
+                    style="width:25%;">
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- FORM -->
+
+        <form id="wizardForm" onsubmit="return false;">
+
+
+            <!-- =========================================
+                 STEP 1
+            ========================================== -->
+
+            <div
+                class="wizard-step"
+                data-step="1">
+
+                <div class="form-section">
+
+                    <div class="section-heading">
+
+                        <div class="section-icon">
+                            <i class="bi bi-buildings"></i>
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Organization details
+                            </h3>
+
+                            <p>
+                                Tell us about the tenant being onboarded.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="row g-3">
+
+
+                        <div class="col-md-6">
+
+                            <label class="form-label-custom">
+                                Organization name
+                            </label>
+
+                            <input
+                                type="text"
+                                class="form-control-custom"
+                                id="orgName"
+                                placeholder="e.g. Al-Fateh Traders"
+                                required>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="form-label-custom">
+                                Primary domain
+                            </label>
+
+                            <input
+                                type="text"
+                                class="form-control-custom"
+                                id="orgDomain"
+                                placeholder="e.g. alfateh.com"
+                                required>
+
+                            <div class="form-hint">
+                                Use the company's primary email domain.
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="form-label-custom">
+                                Industry
+                            </label>
+
+                            <select
+                                class="form-select-custom"
+                                id="orgIndustry">
+
+                                <option>
+                                    Retail &amp; E-commerce
+                                </option>
+
+                                <option>
+                                    Software &amp; IT
+                                </option>
+
+                                <option>
+                                    Finance
+                                </option>
+
+                                <option>
+                                    Healthcare
+                                </option>
+
+                                <option>
+                                    Manufacturing
+                                </option>
+
+                                <option>
+                                    Other
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="form-label-custom">
+                                Plan tier
+                            </label>
+
+                            <select
+                                class="form-select-custom"
+                                id="orgPlan">
+
+                                <option>
+                                    Starter
+                                </option>
+
+                                <option selected>
+                                    Growth
+                                </option>
+
+                                <option>
+                                    Enterprise
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================================
+                 STEP 2
+            ========================================== -->
+
+            <div
+                class="wizard-step d-none"
+                data-step="2">
+
+                <div class="form-section">
+
+                    <div class="section-heading">
+
+                        <div class="section-icon">
+                            <i class="bi bi-person-badge"></i>
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Administrator invitation
+                            </h3>
+
+                            <p>
+                                This person will receive the first login invitation.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="row g-3">
+
+
+                        <div class="col-md-6">
+
+                            <label class="form-label-custom">
+                                Full name
+                            </label>
+
+                            <input
+                                type="text"
+                                class="form-control-custom"
+                                id="adminName"
+                                placeholder="e.g. Nimra Sheikh"
+                                required>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="form-label-custom">
+                                Work email
+                            </label>
+
+                            <input
+                                type="email"
+                                class="form-control-custom"
+                                id="adminEmail"
+                                placeholder="e.g. nimra@alfateh.com"
+                                required>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="form-label-custom">
+                                Role
+                            </label>
+
+                            <select
+                                class="form-select-custom"
+                                id="adminRole">
+
+                                <option>
+                                    Owner
+                                </option>
+
+                                <option>
+                                    Admin
+                                </option>
+
+                                <option>
+                                    Billing Manager
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="form-label-custom">
+                                Send invite via
+                            </label>
+
+                            <select
+                                class="form-select-custom"
+                                id="adminChannel">
+
+                                <option>
+                                    Email
+                                </option>
+
+                                <option>
+                                    SMS + Email
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================================
+                 STEP 3
+            ========================================== -->
+
+            <div
+                class="wizard-step d-none"
+                data-step="3">
+
+                <div class="form-section">
+
+                    <div class="section-heading">
+
+                        <div class="section-icon">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Whitelist setup
+                            </h3>
+
+                            <p>
+                                Select the trusted access rules for day one.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <label class="check-row">
+
+                        <input
+                            type="checkbox"
+                            id="wlDomain"
+                            checked>
+
+                        <div>
+
+                            <div class="crt">
+                                Whitelist the primary domain
+                            </div>
+
+                            <div class="crd">
+
+                                Users with an
+                                @<span id="domainPreview">domain.com</span>
+                                email can self-register.
+
+                            </div>
+
+                        </div>
+
+                    </label>
+
+
+                    <label class="check-row">
+
+                        <input
+                            type="checkbox"
+                            id="wlAdminIp">
+
+                        <div>
+
+                            <div class="crt">
+                                Whitelist admin's current IP
+                            </div>
+
+                            <div class="crd">
+                                Allows trusted access from the administrator's office network.
+                            </div>
+
+                        </div>
+
+                    </label>
+
+
+                    <label class="check-row">
+
+                        <input
+                            type="checkbox"
+                            id="wlApiKey"
+                            checked>
+
+                        <div>
+
+                            <div class="crt">
+                                Auto-issue a sandbox API key
+                            </div>
+
+                            <div class="crd">
+                                Generates a scoped and rate-limited key for testing.
+                            </div>
+
+                        </div>
+
+                    </label>
+
+
+                    <div class="mt-4">
+
+                        <label class="form-label-custom">
+                            Additional domains or emails
+                        </label>
+
+                        <input
+                            type="text"
+                            class="form-control-custom"
+                            id="wlExtra"
+                            placeholder="partner-agency.com, contractor@gmail.com">
+
+                        <div class="form-hint">
+                            Separate multiple values with commas.
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================================
+                 STEP 4
+            ========================================== -->
+
+            <div
+                class="wizard-step d-none"
+                data-step="4">
+
+                <div class="form-section">
+
+                    <div class="section-heading">
+
+                        <div class="section-icon">
+                            <i class="bi bi-clipboard-check"></i>
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Review &amp; launch
+                            </h3>
+
+                            <p>
+                                Verify the configuration before launching onboarding.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div id="reviewBox"></div>
+
+                </div>
+
+            </div>
+
+
+        </form>
+
+
+        <!-- Wizard Footer -->
+
+        <div class="wizard-footer">
+
+            <div class="step-counter">
+
+                Step
+                <strong id="stepNowLbl">1</strong>
+                of
+                <strong>4</strong>
+
+            </div>
+
+
+            <div class="d-flex gap-2">
+
+                <button
+                    class="btn-outline-custom"
+                    id="btnBack"
+                    onclick="wizardBack()">
+
+                    <i class="bi bi-arrow-left"></i>
+
+                    Back
+
+                </button>
+
+
+                <button
+                    class="btn-primary-custom"
+                    id="btnNext"
+                    onclick="wizardNext()">
+
+                    Next
+
+                    <i class="bi bi-arrow-right"></i>
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     WHITELIST TAB
+===================================================== -->
+
+<section
+    class="view-pane"
+    id="pane-whitelist">
+
+
+    <!-- Stats -->
+
+    <div class="row g-3 mb-4">
+
+
+        <div class="col-6 col-lg-3">
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-icon blue">
+                        <i class="bi bi-shield-check"></i>
+                    </div>
+
+                </div>
+
+                <div class="stat-label">
+                    Total entries
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="wlStatTotal">
+                    0
+                </div>
+
+                <div class="stat-caption">
+                    All whitelist rules
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-6 col-lg-3">
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-icon green">
+                        <i class="bi bi-check-circle"></i>
+                    </div>
+
+                </div>
+
+                <div class="stat-label">
+                    Active
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="wlStatActive">
+                    0
+                </div>
+
+                <div class="stat-caption">
+                    Currently enabled
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-6 col-lg-3">
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-icon yellow">
+                        <i class="bi bi-hourglass-split"></i>
+                    </div>
+
+                </div>
+
+                <div class="stat-label">
+                    Pending review
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="wlStatPending">
+                    0
+                </div>
+
+                <div class="stat-caption">
+                    Waiting for approval
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-6 col-lg-3">
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-icon red">
+                        <i class="bi bi-slash-circle"></i>
+                    </div>
+
+                </div>
+
+                <div class="stat-label">
+                    Blocked
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="wlStatBlocked">
+                    0
+                </div>
+
+                <div class="stat-caption">
+                    Access restricted
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- Table -->
+
+    <div class="panel">
+
+
+        <div class="panel-header">
+
+            <div>
+
+                <h3 class="panel-title">
+                    Whitelist entries
+                </h3>
+
+                <p class="panel-subtitle">
+                    Manage trusted domains, email addresses and IP addresses.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- Toolbar -->
+
+        <div class="toolbar">
+
+
+            <div class="search-wrap">
+
+                <i class="bi bi-search"></i>
+
+                <input
+                    type="text"
+                    class="search-input"
+                    id="wlSearch"
+                    placeholder="Search domain, email or IP..."
+                    oninput="renderWhitelist()">
+
+            </div>
+
+
+            <select
+                class="filter-select"
+                id="wlTypeFilter"
+                onchange="renderWhitelist()">
+
+                <option value="all">
+                    All types
+                </option>
+
+                <option value="Domain">
+                    Domain
+                </option>
+
+                <option value="Email">
+                    Email
+                </option>
+
+                <option value="IP Address">
+                    IP Address
+                </option>
+
+            </select>
+
+
+            <select
+                class="filter-select"
+                id="wlStatusFilter"
+                onchange="renderWhitelist()">
+
+                <option value="all">
+                    All statuses
+                </option>
+
+                <option value="Active">
+                    Active
+                </option>
+
+                <option value="Pending">
+                    Pending
+                </option>
+
+                <option value="Blocked">
+                    Blocked
+                </option>
+
+            </select>
+
+
+            <button
+                class="btn-outline-custom"
+                onclick="clearFilters()">
+
+                <i class="bi bi-arrow-counterclockwise"></i>
+
+                Reset
+
+            </button>
+
+
+            <div class="toolbar-spacer"></div>
+
+
+            <button
+                class="btn-primary-custom"
+                data-bs-toggle="modal"
+                data-bs-target="#wlModal"
+                onclick="openWlCreate()">
+
+                <i class="bi bi-plus-lg"></i>
+
+                Add entry
+
+            </button>
+
+
+        </div>
+
+
+        <!-- Table -->
+
+        <div class="table-wrapper">
+
+            <table class="wl-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Value
+                        </th>
+
+                        <th>
+                            Type
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Added by
+                        </th>
+
+                        <th>
+                            Date added
+                        </th>
+
+                        <th>
+                            Enabled
+                        </th>
+
+                        <th style="text-align:right;">
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="wlTableBody"></tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- Empty -->
+
+        <div
+            id="wlEmptyState"
+            class="empty-state">
+
+            <div class="empty-icon">
+
+                <i class="bi bi-shield-slash"></i>
+
+            </div>
+
+            <h5>
+                No whitelist entries found
+            </h5>
+
+            <p>
+                Try changing your filters or add a new whitelist entry.
+            </p>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+</main>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     ADD / EDIT MODAL
+===================================================== -->
+
+<div
+    class="modal fade"
+    id="wlModal"
+    tabindex="-1"
+    aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content">
+
+
+            <div class="modal-header">
+
+                <div>
+
+                    <h5
+                        class="modal-title"
+                        id="wlModalTitle">
+
+                        Add whitelist entry
+
+                    </h5>
+
+                </div>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close">
+                </button>
+
+            </div>
+
+
+            <form onsubmit="return saveWlEntry(event)">
+
+                <div class="modal-body">
+
+                    <div class="mb-3">
+
+                        <label class="form-label-custom">
+                            Entry type
+                        </label>
+
+                        <select
+                            class="form-select-custom"
+                            id="wlFType">
+
+                            <option>
+                                Domain
+                            </option>
+
+                            <option>
+                                Email
+                            </option>
+
+                            <option>
+                                IP Address
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <label class="form-label-custom">
+                            Value
+                        </label>
+
+                        <input
+                            type="text"
+                            class="form-control-custom"
+                            id="wlFValue"
+                            placeholder="e.g. partner-agency.com"
+                            required>
+
+                    </div>
+
+
+                    <div>
+
+                        <label class="form-label-custom">
+                            Status
+                        </label>
+
+                        <select
+                            class="form-select-custom"
+                            id="wlFStatus">
+
+                            <option>
+                                Active
+                            </option>
+
+                            <option>
+                                Pending
+                            </option>
+
+                            <option>
+                                Blocked
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="modal-footer">
+
+                    <button
+                        type="button"
+                        class="btn-outline-custom"
+                        data-bs-dismiss="modal">
+
+                        Cancel
+
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="btn-primary-custom"
+                        id="wlSubmitBtn">
+
+                        <i class="bi bi-check-lg"></i>
+
+                        Add entry
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     TOAST
+===================================================== -->
+
+<div
+    class="toast-container position-fixed bottom-0 end-0 p-3"
+    style="z-index:1080;">
+
+    <div
+        id="appToast"
+        class="toast toast-custom"
+        role="alert">
+
+        <div class="d-flex">
+
+            <div
+                class="toast-body"
+                id="appToastBody">
+
+                Done.
+
+            </div>
+
+            <button
+                type="button"
+                class="btn-close me-2 m-auto"
+                data-bs-dismiss="toast">
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+function toggleSidebar(){
+
+    document
+        .getElementById('sidebar')
+        .classList
+        .toggle('open');
+
+}
+
+
+function selectNav(el){
+
+    document
+        .querySelectorAll('.nav-link-custom')
+        .forEach(item => item.classList.remove('active'));
+
+    el.classList.add('active');
+
+    document
+        .getElementById('sidebar')
+        .classList.remove('open');
+
+    const text = el.textContent
+        .replace(/\d+/g,'')
+        .trim();
+
+    showToast(
+        text + ' section selected.'
+    );
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function showToast(message){
+
+    document
+        .getElementById('appToastBody')
+        .textContent = message;
+
+    const toastElement =
+        document.getElementById('appToast');
+
+    bootstrap
+        .Toast
+        .getOrCreateInstance(
+            toastElement,
+            {
+                delay:2200
+            }
+        )
+        .show();
+
+}
+
+
+/* =========================================================
+   TABS
+========================================================= */
+
+function switchTab(tab){
+
+    document
+        .querySelectorAll('.tab-btn')
+        .forEach(button => {
+
+            button.classList.remove('active');
+
+        });
+
+
+    const activeButton =
+        document.querySelector(
+            '.tab-btn[data-tab="' + tab + '"]'
+        );
+
+    if(activeButton){
+
+        activeButton.classList.add('active');
+
+    }
+
+
+    document
+        .querySelectorAll('.view-pane')
+        .forEach(pane => {
+
+            pane.classList.remove('active');
+
+        });
+
+
+    const pane =
+        document.getElementById(
+            'pane-' + tab
+        );
+
+    if(pane){
+
+        pane.classList.add('active');
+
+    }
+
+}
+
+
+/* =========================================================
+   COMPLETE
+========================================================= */
+
+function markComplete(){
+
+    showToast(
+        'Onboarding & Whitelist UI marked as complete.'
+    );
+
+}
+
+
+/* =========================================================
+   WIZARD
+========================================================= */
+
+const stepLabels = [
+    'Organization',
+    'Admin Invite',
+    'Whitelist Setup',
+    'Review & Launch'
+];
+
+let currentStep = 1;
+
+const totalSteps = 4;
+
+
+function renderStepper(){
+
+    const wrap =
+        document.getElementById('stepper');
+
+    wrap.innerHTML = '';
+
+
+    stepLabels.forEach(
+        (label,index) => {
+
+            const number = index + 1;
+
+            let className = '';
+
+            if(number < currentStep){
+
+                className = 'done';
+
+            }
+            else if(number === currentStep){
+
+                className = 'active';
+
+            }
+
+
+            const item =
+                document.createElement('div');
+
+            item.className =
+                'step-item ' + className;
+
+
+            const circle =
+                number < currentStep
+
+                ? '<i class="bi bi-check-lg"></i>'
+
+                : number;
+
+
+            item.innerHTML = `
+
+                <div class="step-circle">
+                    ${circle}
+                </div>
+
+                <div class="step-label">
+                    ${label}
+                </div>
+
+            `;
+
+
+            wrap.appendChild(item);
+
+        }
+    );
+
+}
+
+
+function updateProgress(){
+
+    const percentage =
+        (currentStep / totalSteps) * 100;
+
+    document
+        .getElementById('wizardProgress')
+        .style.width =
+        percentage + '%';
+
+}
+
+
+function showStep(number){
+
+    document
+        .querySelectorAll('.wizard-step')
+        .forEach(step => {
+
+            step.classList.add('d-none');
+
+        });
+
+
+    const activeStep =
+        document.querySelector(
+            '.wizard-step[data-step="' + number + '"]'
+        );
+
+
+    if(activeStep){
+
+        activeStep.classList.remove('d-none');
+
+    }
+
+
+    document
+        .getElementById('stepNowLbl')
+        .textContent = number;
+
+
+    const backButton =
+        document.getElementById('btnBack');
+
+    backButton.style.visibility =
+        number === 1
+        ? 'hidden'
+        : 'visible';
+
+
+    const nextButton =
+        document.getElementById('btnNext');
+
+
+    if(number === totalSteps){
+
+        nextButton.innerHTML = `
+            <i class="bi bi-rocket-takeoff"></i>
+            Launch onboarding
+        `;
+
+    }
+    else{
+
+        nextButton.innerHTML = `
+            Next
+            <i class="bi bi-arrow-right"></i>
+        `;
+
+    }
+
+
+    renderStepper();
+
+    updateProgress();
+
+}
+
+
+function validateStep(number){
+
+    if(number === 1){
+
+        const name =
+            document.getElementById('orgName')
+            .value
+            .trim();
+
+        const domain =
+            document.getElementById('orgDomain')
+            .value
+            .trim();
+
+
+        if(!name){
+
+            showToast(
+                'Please enter the organization name.'
+            );
+
+            document
+                .getElementById('orgName')
+                .focus();
+
+            return false;
+
+        }
+
+
+        if(!domain){
+
+            showToast(
+                'Please enter the primary domain.'
+            );
+
+            document
+                .getElementById('orgDomain')
+                .focus();
+
+            return false;
+
+        }
+
+
+        document
+            .getElementById('domainPreview')
+            .textContent = domain;
+
+    }
+
+
+    if(number === 2){
+
+        const name =
+            document.getElementById('adminName')
+            .value
+            .trim();
+
+        const email =
+            document.getElementById('adminEmail')
+            .value
+            .trim();
+
+
+        if(!name){
+
+            showToast(
+                'Please enter the administrator name.'
+            );
+
+            return false;
+
+        }
+
+
+        if(!email){
+
+            showToast(
+                'Please enter the administrator email.'
+            );
+
+            return false;
+
+        }
+
+
+        const emailPattern =
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+
+        if(!emailPattern.test(email)){
+
+            showToast(
+                'Please enter a valid email address.'
+            );
+
+            return false;
+
+        }
+
+    }
+
+
+    return true;
+
+}
+
+
+/* =========================================================
+   REVIEW
+========================================================= */
+
+function buildReview(){
+
+    const box =
+        document.getElementById('reviewBox');
+
+
+    const orgName =
+        document.getElementById('orgName')
+        .value
+        .trim() || '—';
+
+    const domain =
+        document.getElementById('orgDomain')
+        .value
+        .trim() || '—';
+
+    const industry =
+        document.getElementById('orgIndustry')
+        .value;
+
+    const plan =
+        document.getElementById('orgPlan')
+        .value;
+
+
+    const adminName =
+        document.getElementById('adminName')
+        .value
+        .trim() || '—';
+
+    const adminEmail =
+        document.getElementById('adminEmail')
+        .value
+        .trim() || '—';
+
+    const adminRole =
+        document.getElementById('adminRole')
+        .value;
+
+    const adminChannel =
+        document.getElementById('adminChannel')
+        .value;
+
+
+    const domainEnabled =
+        document.getElementById('wlDomain')
+        .checked
+        ? 'Yes'
+        : 'No';
+
+
+    const ipEnabled =
+        document.getElementById('wlAdminIp')
+        .checked
+        ? 'Yes'
+        : 'No';
+
+
+    const apiEnabled =
+        document.getElementById('wlApiKey')
+        .checked
+        ? 'Yes'
+        : 'No';
+
+
+    const extra =
+        document.getElementById('wlExtra')
+        .value
+        .trim() || 'None';
+
+
+    box.innerHTML = `
+
+        <div class="review-block">
+
+            <h6>
+                <i class="bi bi-buildings"></i>
+                Organization
+            </h6>
+
+            <div class="review-row">
+                <span class="rk">Name</span>
+                <span class="rv">
+                    ${escapeHtml(orgName)}
+                </span>
+            </div>
+
+            <div class="review-row">
+                <span class="rk">Primary domain</span>
+                <span class="rv mono">
+                    ${escapeHtml(domain)}
+                </span>
+            </div>
+
+            <div class="review-row">
+                <span class="rk">Industry</span>
+                <span class="rv">
+                    ${escapeHtml(industry)}
+                </span>
+            </div>
+
+            <div class="review-row">
+                <span class="rk">Plan</span>
+                <span class="rv">
+                    ${escapeHtml(plan)}
+                </span>
+            </div>
+
+        </div>
+
+
+        <div class="review-block">
+
+            <h6>
+                <i class="bi bi-person-badge"></i>
+                Administrator
+            </h6>
+
+            <div class="review-row">
+                <span class="rk">Name</span>
+                <span class="rv">
+                    ${escapeHtml(adminName)}
+                </span>
+            </div>
+
+            <div class="review-row">
+                <span class="rk">Email</span>
+                <span class="rv">
+                    ${escapeHtml(adminEmail)}
+                </span>
+            </div>
+
+            <div class="review-row">
+                <span class="rk">Role</span>
+                <span class="rv">
+                    ${escapeHtml(adminRole)}
+                </span>
+            </div>
+
+            <div class="review-row">
+                <span class="rk">Invite method</span>
+                <span class="rv">
+                    ${escapeHtml(adminChannel)}
+                </span>
+            </div>
+
+        </div>
+
+
+        <div class="review-block">
+
+            <h6>
+                <i class="bi bi-shield-check"></i>
+                Whitelist configuration
+            </h6>
+
+            <div class="review-row">
+                <span class="rk">
+                    Primary domain
+                </span>
+
+                <span class="rv">
+                    ${domainEnabled}
+                </span>
+            </div>
+
+            <div class="review-row">
+                <span class="rk">
+                    Admin IP
+                </span>
+
+                <span class="rv">
+                    ${ipEnabled}
+                </span>
+            </div>
+
+            <div class="review-row">
+                <span class="rk">
+                    Sandbox API key
+                </span>
+
+                <span class="rv">
+                    ${apiEnabled}
+                </span>
+            </div>
+
+            <div class="review-row">
+                <span class="rk">
+                    Additional entries
+                </span>
+
+                <span class="rv">
+                    ${escapeHtml(extra)}
+                </span>
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   NEXT
+========================================================= */
+
+function wizardNext(){
+
+    if(!validateStep(currentStep)){
+        return;
+    }
+
+
+    if(currentStep === totalSteps){
+
+        const domain =
+            document.getElementById('orgDomain')
+            .value
+            .trim();
+
+
+        if(
+            document.getElementById('wlDomain')
+            .checked &&
+            domain
+        ){
+
+            addWhitelistEntry(
+                'Domain',
+                domain,
+                'Active',
+                'Onboarding Wizard'
+            );
+
+        }
+
+
+        if(
+            document.getElementById('wlAdminIp')
+            .checked
+        ){
+
+            addWhitelistEntry(
+                'IP Address',
+                randomIp(),
+                'Active',
+                'Onboarding Wizard'
+            );
+
+        }
+
+
+        const extra =
+            document.getElementById('wlExtra')
+            .value
+            .trim();
+
+
+        if(extra){
+
+            extra
+                .split(',')
+                .map(item => item.trim())
+                .filter(Boolean)
+                .forEach(value => {
+
+                    const type =
+                        value.includes('@')
+                        ? 'Email'
+                        : 'Domain';
+
+
+                    addWhitelistEntry(
+                        type,
+                        value,
+                        'Pending',
+                        'Onboarding Wizard'
+                    );
+
+                });
+
+        }
+
+
+        showToast(
+            'Onboarding launched successfully.'
+        );
+
+
+        switchTab('whitelist');
+
+        resetWizard();
+
+        return;
+
+    }
+
+
+    currentStep++;
+
+
+    if(currentStep === totalSteps){
+
+        buildReview();
+
+    }
+
+
+    showStep(currentStep);
+
+}
+
+
+/* =========================================================
+   BACK
+========================================================= */
+
+function wizardBack(){
+
+    if(currentStep === 1){
+        return;
+    }
+
+
+    currentStep--;
+
+    showStep(currentStep);
+
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+function resetWizard(){
+
+    currentStep = 1;
+
+    document
+        .getElementById('wizardForm')
+        .reset();
+
+
+    document
+        .getElementById('wlDomain')
+        .checked = true;
+
+
+    document
+        .getElementById('wlApiKey')
+        .checked = true;
+
+
+    document
+        .getElementById('domainPreview')
+        .textContent = 'domain.com';
+
+
+    showStep(1);
+
+}
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function randomIp(){
+
+    return [1,2,3,4]
+        .map(() =>
+            Math.floor(
+                Math.random() * 255
+            )
+        )
+        .join('.');
+
+}
+
+
+function escapeHtml(value){
+
+    const div =
+        document.createElement('div');
+
+    div.textContent = value;
+
+    return div.innerHTML;
+
+}
+
+
+/* =========================================================
+   WHITELIST DATA
+========================================================= */
+
+let wlSeq = 5;
+
+let whitelist = [
+
+    {
+        id:'WL-001',
+        type:'Domain',
+        value:'alfateh.com',
+        status:'Active',
+        addedBy:'Tanveer Alam',
+        date:daysAgo(6),
+        enabled:true
+    },
+
+    {
+        id:'WL-002',
+        type:'Email',
+        value:'contractor@gmail.com',
+        status:'Pending',
+        addedBy:'Nimra Sheikh',
+        date:daysAgo(4),
+        enabled:false
+    },
+
+    {
+        id:'WL-003',
+        type:'IP Address',
+        value:'103.75.238.14',
+        status:'Active',
+        addedBy:'Ali Naqvi',
+        date:daysAgo(3),
+        enabled:true
+    },
+
+    {
+        id:'WL-004',
+        type:'Domain',
+        value:'partner-agency.com',
+        status:'Blocked',
+        addedBy:'Security Bot',
+        date:daysAgo(2),
+        enabled:false
+    },
+
+    {
+        id:'WL-005',
+        type:'Email',
+        value:'vendor@supplyco.pk',
+        status:'Active',
+        addedBy:'Tanveer Alam',
+        date:daysAgo(1),
+        enabled:true
+    }
+
+];
+
+
+function daysAgo(days){
+
+    const date = new Date();
+
+    date.setDate(
+        date.getDate() - days
+    );
+
+    return date;
+
+}
+
+
+function fmtDate(date){
+
+    return new Date(date)
+        .toLocaleDateString(
+            'en-GB',
+            {
+                day:'2-digit',
+                month:'short',
+                year:'numeric'
+            }
+        );
+
+}
+
+
+/* =========================================================
+   ADD ENTRY
+========================================================= */
+
+function addWhitelistEntry(
+    type,
+    value,
+    status,
+    addedBy
+){
+
+    wlSeq++;
+
+
+    whitelist.unshift({
+
+        id:
+            'WL-' +
+            String(wlSeq).padStart(3,'0'),
+
+        type,
+        value,
+        status,
+        addedBy,
+
+        date:new Date(),
+
+        enabled:
+            status === 'Active'
+
+    });
+
+
+    renderWhitelist();
+
+}
+
+
+/* =========================================================
+   STATUS CLASS
+========================================================= */
+
+function statusClass(status){
+
+    if(status === 'Active'){
+        return 'status-active';
+    }
+
+    if(status === 'Blocked'){
+        return 'status-blocked';
+    }
+
+    return 'status-pending';
+
+}
+
+
+/* =========================================================
+   RENDER WHITELIST
+========================================================= */
+
+function renderWhitelist(){
+
+    const search =
+        document
+            .getElementById('wlSearch')
+            .value
+            .trim()
+            .toLowerCase();
+
+
+    const typeFilter =
+        document
+            .getElementById('wlTypeFilter')
+            .value;
+
+
+    const statusFilter =
+        document
+            .getElementById('wlStatusFilter')
+            .value;
+
+
+    const list =
+        whitelist.filter(entry => {
+
+            if(
+                typeFilter !== 'all' &&
+                entry.type !== typeFilter
+            ){
+
+                return false;
+
+            }
+
+
+            if(
+                statusFilter !== 'all' &&
+                entry.status !== statusFilter
+            ){
+
+                return false;
+
+            }
+
+
+            if(search){
+
+                const searchable =
+                    (
+                        entry.value +
+                        ' ' +
+                        entry.id +
+                        ' ' +
+                        entry.addedBy
+                    )
+                    .toLowerCase();
+
+
+                if(
+                    !searchable.includes(search)
+                ){
+
+                    return false;
+
+                }
+
+            }
+
+
+            return true;
+
+        });
+
+
+    const body =
+        document.getElementById(
+            'wlTableBody'
+        );
+
+
+    body.innerHTML = '';
+
+
+    const emptyState =
+        document.getElementById(
+            'wlEmptyState'
+        );
+
+
+    if(list.length === 0){
+
+        emptyState.style.display = 'block';
+
+    }
+    else{
+
+        emptyState.style.display = 'none';
+
+    }
+
+
+    list.forEach(entry => {
+
+        const row =
+            document.createElement('tr');
+
+
+        row.innerHTML = `
+
+            <td>
+
+                <div class="wl-value">
+                    ${escapeHtml(entry.value)}
+                </div>
+
+                <div class="wl-id">
+                    ${entry.id}
+                </div>
+
+            </td>
+
+
+            <td>
+
+                <span class="type-chip">
+                    ${escapeHtml(entry.type)}
+                </span>
+
+            </td>
+
+
+            <td>
+
+                <span class="status-pill ${statusClass(entry.status)}">
+
+                    <span class="dot"></span>
+
+                    ${escapeHtml(entry.status)}
+
+                </span>
+
+            </td>
+
+
+            <td>
+                ${escapeHtml(entry.addedBy)}
+            </td>
+
+
+            <td>
+                ${fmtDate(entry.date)}
+            </td>
+
+
+            <td>
+
+                <label class="switch">
+
+                    <input
+                        type="checkbox"
+                        ${entry.enabled ? 'checked' : ''}
+                        onchange="
+                            toggleWl(
+                                '${entry.id}',
+                                this.checked
+                            )
+                        "
+                    >
+
+                    <span class="slider"></span>
+
+                </label>
+
+            </td>
+
+
+            <td style="text-align:right; white-space:nowrap;">
+
+                <button
+                    class="btn-icon"
+                    title="Edit entry"
+                    onclick="
+                        openWlEdit(
+                            '${entry.id}'
+                        )
+                    ">
+
+                    <i class="bi bi-pencil"></i>
+
+                </button>
+
+
+                <button
+                    class="btn-icon danger"
+                    title="Delete entry"
+                    onclick="
+                        deleteWl(
+                            '${entry.id}'
+                        )
+                    ">
+
+                    <i class="bi bi-trash3"></i>
+
+                </button>
+
+            </td>
+
+        `;
+
+
+        body.appendChild(row);
+
+    });
+
+
+    updateWlStats();
+
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+function updateWlStats(){
+
+    document
+        .getElementById('wlStatTotal')
+        .textContent =
+        whitelist.length;
+
+
+    document
+        .getElementById('wlStatActive')
+        .textContent =
+        whitelist.filter(
+            item => item.status === 'Active'
+        ).length;
+
+
+    document
+        .getElementById('wlStatPending')
+        .textContent =
+        whitelist.filter(
+            item => item.status === 'Pending'
+        ).length;
+
+
+    document
+        .getElementById('wlStatBlocked')
+        .textContent =
+        whitelist.filter(
+            item => item.status === 'Blocked'
+        ).length;
+
+}
+
+
+/* =========================================================
+   TOGGLE
+========================================================= */
+
+function toggleWl(id, checked){
+
+    const entry =
+        whitelist.find(
+            item => item.id === id
+        );
+
+
+    if(!entry){
+        return;
+    }
+
+
+    entry.enabled = checked;
+
+
+    if(
+        checked &&
+        entry.status === 'Blocked'
+    ){
+
+        entry.status = 'Pending';
+
+    }
+
+
+    if(
+        !checked &&
+        entry.status === 'Active'
+    ){
+
+        entry.status = 'Pending';
+
+    }
+
+
+    renderWhitelist();
+
+
+    showToast(
+        id +
+        (checked
+            ? ' enabled.'
+            : ' disabled.')
+    );
+
+}
+
+
+/* =========================================================
+   EDIT
+========================================================= */
+
+let wlEditingId = null;
+
+
+function openWlCreate(){
+
+    wlEditingId = null;
+
+
+    document
+        .getElementById('wlModalTitle')
+        .textContent =
+        'Add whitelist entry';
+
+
+    document
+        .getElementById('wlSubmitBtn')
+        .innerHTML = `
+            <i class="bi bi-check-lg"></i>
+            Add entry
+        `;
+
+
+    document
+        .getElementById('wlFType')
+        .value = 'Domain';
+
+
+    document
+        .getElementById('wlFValue')
+        .value = '';
+
+
+    document
+        .getElementById('wlFStatus')
+        .value = 'Pending';
+
+}
+
+
+function openWlEdit(id){
+
+    const entry =
+        whitelist.find(
+            item => item.id === id
+        );
+
+
+    if(!entry){
+        return;
+    }
+
+
+    wlEditingId = id;
+
+
+    document
+        .getElementById('wlModalTitle')
+        .textContent =
+        'Edit ' + entry.id;
+
+
+    document
+        .getElementById('wlSubmitBtn')
+        .innerHTML = `
+            <i class="bi bi-check-lg"></i>
+            Save changes
+        `;
+
+
+    document
+        .getElementById('wlFType')
+        .value =
+        entry.type;
+
+
+    document
+        .getElementById('wlFValue')
+        .value =
+        entry.value;
+
+
+    document
+        .getElementById('wlFStatus')
+        .value =
+        entry.status;
+
+
+    bootstrap
+        .Modal
+        .getOrCreateInstance(
+            document.getElementById('wlModal')
+        )
+        .show();
+
+}
+
+
+/* =========================================================
+   SAVE
+========================================================= */
+
+function saveWlEntry(event){
+
+    event.preventDefault();
+
+
+    const type =
+        document
+            .getElementById('wlFType')
+            .value;
+
+
+    const value =
+        document
+            .getElementById('wlFValue')
+            .value
+            .trim();
+
+
+    const status =
+        document
+            .getElementById('wlFStatus')
+            .value;
+
+
+    if(!value){
+
+        showToast(
+            'Please enter a whitelist value.'
+        );
+
+        return false;
+
+    }
+
+
+    if(wlEditingId){
+
+        const entry =
+            whitelist.find(
+                item => item.id === wlEditingId
+            );
+
+
+        if(entry){
+
+            entry.type = type;
+            entry.value = value;
+            entry.status = status;
+
+            entry.enabled =
+                status === 'Active';
+
+            showToast(
+                entry.id +
+                ' updated successfully.'
+            );
+
+        }
+
+    }
+    else{
+
+        addWhitelistEntry(
+            type,
+            value,
+            status,
+            'Tanveer Alam'
+        );
+
+
+        showToast(
+            'Whitelist entry added successfully.'
+        );
+
+    }
+
+
+    bootstrap
+        .Modal
+        .getOrCreateInstance(
+            document.getElementById('wlModal')
+        )
+        .hide();
+
+
+    renderWhitelist();
+
+
+    return false;
+
+}
+
+
+/* =========================================================
+   DELETE
+========================================================= */
+
+function deleteWl(id){
+
+    const entry =
+        whitelist.find(
+            item => item.id === id
+        );
+
+
+    if(!entry){
+        return;
+    }
+
+
+    const confirmed =
+        confirm(
+            'Remove ' +
+            entry.id +
+            ' — "' +
+            entry.value +
+            '" from the whitelist?'
+        );
+
+
+    if(!confirmed){
+        return;
+    }
+
+
+    whitelist =
+        whitelist.filter(
+            item => item.id !== id
+        );
+
+
+    renderWhitelist();
+
+
+    showToast(
+        id + ' removed successfully.'
+    );
+
+}
+
+
+/* =========================================================
+   CLEAR FILTERS
+========================================================= */
+
+function clearFilters(){
+
+    document
+        .getElementById('wlSearch')
+        .value = '';
+
+
+    document
+        .getElementById('wlTypeFilter')
+        .value = 'all';
+
+
+    document
+        .getElementById('wlStatusFilter')
+        .value = 'all';
+
+
+    renderWhitelist();
+
+    showToast(
+        'Whitelist filters cleared.'
+    );
+
+}
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+document.addEventListener(
+    'DOMContentLoaded',
+    function(){
+
+        showStep(1);
+
+        renderWhitelist();
+
+    }
+);
+
+</script>
+
+</body>
+</html>
