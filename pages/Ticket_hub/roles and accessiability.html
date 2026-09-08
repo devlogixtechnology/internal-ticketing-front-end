@@ -1,0 +1,3286 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Contact Roles & Accessibility | TicketHub</title>
+
+    <!-- Bootstrap 5 -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <!-- Font Awesome -->
+    <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        /* =====================================================
+           TICKETHUB THEME
+        ===================================================== */
+
+        :root {
+            --primary: #2C3E50;
+            --secondary: #5F6B73;
+            --muted: #849099;
+            --accent: #187666;
+            --accent-dark: #125B50;
+
+            --background: #F4F6F8;
+            --surface: #FFFFFF;
+            --border: #E3E8EC;
+
+            --sidebar-width: 250px;
+
+            --base-font-size: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: var(--base-font-size);
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            background: var(--background);
+            color: var(--primary);
+            font-family:
+                Inter,
+                "Segoe UI",
+                Tahoma,
+                Geneva,
+                Verdana,
+                sans-serif;
+
+            min-height: 100vh;
+
+            transition:
+                background-color .25s ease,
+                color .25s ease;
+        }
+
+
+        /* =====================================================
+           ACCESSIBILITY
+        ===================================================== */
+
+        .skip-link {
+            position: fixed;
+            top: -100px;
+            left: 15px;
+            z-index: 9999;
+
+            background: var(--accent);
+            color: #fff;
+
+            padding: 10px 16px;
+            border-radius: 0 0 8px 8px;
+
+            text-decoration: none;
+            font-weight: 600;
+
+            transition: top .2s ease;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+        :focus-visible {
+            outline: 3px solid #0d6efd !important;
+            outline-offset: 3px;
+        }
+
+
+        /* =====================================================
+           SIDEBAR
+        ===================================================== */
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+
+            width: var(--sidebar-width);
+            height: 100vh;
+
+            background: #ffffff;
+            border-right: 1px solid var(--border);
+
+            z-index: 1000;
+
+            display: flex;
+            flex-direction: column;
+
+            transition: transform .3s ease;
+        }
+
+        .brand {
+            height: 76px;
+
+            display: flex;
+            align-items: center;
+
+            padding: 0 24px;
+
+            border-bottom: 1px solid var(--border);
+        }
+
+        .brand-icon {
+            width: 38px;
+            height: 38px;
+
+            border-radius: 10px;
+
+            background: var(--accent);
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            margin-right: 11px;
+        }
+
+        .brand-name {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: -.3px;
+        }
+
+        .sidebar-section {
+            padding: 24px 14px 8px;
+
+            color: var(--muted);
+            font-size: .68rem;
+            font-weight: 700;
+
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sidebar-nav {
+            padding: 0 12px;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+
+            gap: 12px;
+
+            padding: 11px 13px;
+            margin-bottom: 4px;
+
+            border-radius: 9px;
+
+            color: var(--secondary);
+            text-decoration: none;
+
+            font-size: .92rem;
+            font-weight: 600;
+
+            transition: all .2s ease;
+        }
+
+        .sidebar-nav a i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-nav a:hover {
+            background: #EFF7F5;
+            color: var(--accent);
+        }
+
+        .sidebar-nav a.active {
+            background: #E5F3F0;
+            color: var(--accent);
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+
+            padding: 16px;
+
+            border-top: 1px solid var(--border);
+        }
+
+        .user-mini {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 38px;
+            height: 38px;
+
+            border-radius: 50%;
+
+            background: var(--accent);
+            color: #fff;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: .8rem;
+            font-weight: 700;
+        }
+
+
+        /* =====================================================
+           MAIN AREA
+        ===================================================== */
+
+        .main-wrapper {
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+        }
+
+        .topbar {
+            height: 76px;
+
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 30px;
+        }
+
+        .mobile-menu {
+            display: none;
+        }
+
+        .page-content {
+            padding: 30px;
+            max-width: 1500px;
+        }
+
+
+        /* =====================================================
+           PAGE HEADER
+        ===================================================== */
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            gap: 20px;
+
+            margin-bottom: 26px;
+        }
+
+        .breadcrumb-text {
+            color: var(--muted);
+            font-size: .82rem;
+            margin-bottom: 5px;
+        }
+
+        .page-title {
+            margin: 0;
+
+            color: var(--primary);
+
+            font-size: 1.75rem;
+            font-weight: 800;
+
+            letter-spacing: -.5px;
+        }
+
+        .page-subtitle {
+            margin: 5px 0 0;
+
+            color: var(--secondary);
+            font-size: .9rem;
+        }
+
+
+        /* =====================================================
+           STAT CARDS
+        ===================================================== */
+
+        .stat-card {
+            position: relative;
+
+            background: #fff;
+
+            border: 1px solid var(--border);
+            border-radius: 14px;
+
+            padding: 20px;
+
+            height: 100%;
+
+            box-shadow: 0 4px 16px rgba(0,0,0,.035);
+
+            transition: transform .2s ease,
+                        box-shadow .2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 8px 25px rgba(0,0,0,.06);
+        }
+
+        .stat-icon {
+            width: 44px;
+            height: 44px;
+
+            border-radius: 11px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #E8F5F2;
+            color: var(--accent);
+
+            margin-bottom: 14px;
+        }
+
+        .stat-label {
+            color: var(--secondary);
+            font-size: .78rem;
+            font-weight: 600;
+        }
+
+        .stat-value {
+            color: var(--primary);
+            font-size: 1.55rem;
+            font-weight: 800;
+
+            margin-top: 3px;
+        }
+
+
+        /* =====================================================
+           MAIN CARD
+        ===================================================== */
+
+        .main-card {
+            background: #fff;
+
+            border: 1px solid var(--border);
+            border-radius: 16px;
+
+            box-shadow: 0 5px 20px rgba(0,0,0,.035);
+
+            overflow: hidden;
+        }
+
+        .card-header-custom {
+            padding: 22px 24px;
+
+            border-bottom: 1px solid var(--border);
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .section-title {
+            font-weight: 750;
+            color: var(--primary);
+            margin: 0;
+        }
+
+        .section-description {
+            color: var(--muted);
+            font-size: .8rem;
+            margin: 4px 0 0;
+        }
+
+
+        /* =====================================================
+           TABS
+        ===================================================== */
+
+        .custom-tabs {
+            padding: 6px;
+
+            background: #EEF2F4;
+
+            border-radius: 10px;
+
+            display: inline-flex;
+        }
+
+        .custom-tabs .nav-link {
+            border: 0;
+
+            color: var(--secondary);
+
+            border-radius: 7px;
+
+            padding: 9px 18px;
+
+            font-size: .84rem;
+            font-weight: 650;
+
+            transition: .2s ease;
+        }
+
+        .custom-tabs .nav-link:hover {
+            color: var(--accent);
+        }
+
+        .custom-tabs .nav-link.active {
+            background: var(--accent);
+            color: #fff;
+
+            box-shadow: 0 3px 8px rgba(24,118,102,.2);
+        }
+
+
+        /* =====================================================
+           SEARCH AREA
+        ===================================================== */
+
+        .toolbar {
+            padding: 20px 24px;
+
+            display: flex;
+            justify-content: space-between;
+
+            gap: 12px;
+            flex-wrap: wrap;
+
+            border-bottom: 1px solid var(--border);
+        }
+
+        .search-box {
+            max-width: 380px;
+            width: 100%;
+        }
+
+        .search-box .input-group-text {
+            background: #F7F9FA;
+            border-right: 0;
+            color: var(--muted);
+        }
+
+        .search-box input {
+            background: #F7F9FA;
+            border-left: 0;
+        }
+
+
+        /* =====================================================
+           BUTTONS
+        ===================================================== */
+
+        .btn-primary-custom {
+            background: var(--accent);
+            color: #fff;
+
+            border: 0;
+
+            border-radius: 8px;
+
+            padding: 9px 15px;
+
+            font-weight: 650;
+
+            transition: .2s ease;
+        }
+
+        .btn-primary-custom:hover {
+            background: var(--accent-dark);
+            color: #fff;
+
+            transform: translateY(-1px);
+        }
+
+        .btn-outline-custom {
+            border: 1px solid var(--border);
+            background: #fff;
+            color: var(--secondary);
+
+            border-radius: 8px;
+        }
+
+        .btn-outline-custom:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: #F1F8F6;
+        }
+
+
+        /* =====================================================
+           TABLE
+        ===================================================== */
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .contacts-table {
+            min-width: 850px;
+        }
+
+        .contacts-table thead th {
+            background: #F8FAFB;
+
+            color: var(--muted);
+
+            font-size: .7rem;
+            font-weight: 750;
+
+            text-transform: uppercase;
+            letter-spacing: .5px;
+
+            border-bottom: 1px solid var(--border);
+
+            padding: 14px 18px;
+        }
+
+        .contacts-table tbody td {
+            padding: 17px 18px;
+
+            border-color: #EEF1F3;
+
+            vertical-align: middle;
+        }
+
+        .contacts-table tbody tr {
+            transition: background .15s ease;
+        }
+
+        .contacts-table tbody tr:hover {
+            background: #FAFCFC;
+        }
+
+        .contact-info {
+            display: flex;
+            align-items: center;
+
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+
+            border-radius: 50%;
+
+            background: #E5F3F0;
+            color: var(--accent);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: .78rem;
+            font-weight: 750;
+
+            flex-shrink: 0;
+        }
+
+        .contact-name {
+            color: var(--primary);
+            font-size: .88rem;
+            font-weight: 700;
+        }
+
+        .contact-id {
+            color: var(--muted);
+            font-size: .7rem;
+            margin-top: 2px;
+        }
+
+        .email-text {
+            color: var(--secondary);
+            font-size: .83rem;
+        }
+
+
+        /* =====================================================
+           ROLE BADGES
+        ===================================================== */
+
+        .role-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+
+            padding: 6px 11px;
+
+            border-radius: 20px;
+
+            font-size: .7rem;
+            font-weight: 700;
+        }
+
+        .role-admin {
+            background: #FDECEC;
+            color: #D92D20;
+        }
+
+        .role-agent {
+            background: #E5F6F3;
+            color: #187666;
+        }
+
+        .role-contact {
+            background: #E7F5FC;
+            color: #0277BD;
+        }
+
+        .permission {
+            display: inline-block;
+
+            padding: 4px 8px;
+
+            margin: 2px;
+
+            background: #F1F4F6;
+
+            color: #59636B;
+
+            border-radius: 5px;
+
+            font-size: .68rem;
+            font-weight: 600;
+        }
+
+
+        /* =====================================================
+           ACTION BUTTONS
+        ===================================================== */
+
+        .action-btn {
+            width: 34px;
+            height: 34px;
+
+            border: 1px solid var(--border);
+
+            background: #fff;
+
+            border-radius: 7px;
+
+            color: var(--secondary);
+
+            transition: .2s ease;
+        }
+
+        .action-btn:hover {
+            background: #F1F8F6;
+            color: var(--accent);
+            border-color: #B9DDD6;
+        }
+
+        .action-btn.delete:hover {
+            background: #FFF1F1;
+            color: #D92D20;
+            border-color: #F2C6C6;
+        }
+
+
+        /* =====================================================
+           ACCESSIBILITY SETTINGS
+        ===================================================== */
+
+        .settings-grid {
+            padding: 24px;
+        }
+
+        .setting-item {
+            height: 100%;
+
+            padding: 20px;
+
+            background: #F8FAFB;
+
+            border: 1px solid var(--border);
+
+            border-radius: 12px;
+
+            transition: .2s ease;
+        }
+
+        .setting-item:hover {
+            border-color: #C9D8D5;
+            background: #FBFCFC;
+        }
+
+        .setting-icon {
+            width: 42px;
+            height: 42px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 10px;
+
+            background: #E5F3F0;
+            color: var(--accent);
+
+            margin-bottom: 13px;
+        }
+
+        .setting-title {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .setting-description {
+            color: var(--secondary);
+            font-size: .78rem;
+            line-height: 1.55;
+        }
+
+        .font-controls {
+            display: flex;
+            gap: 5px;
+            margin-top: 15px;
+        }
+
+        .font-controls button {
+            flex: 1;
+        }
+
+
+        /* =====================================================
+           EMPTY STATE
+        ===================================================== */
+
+        .empty-state {
+            text-align: center;
+
+            padding: 50px 20px;
+
+            display: none;
+        }
+
+        .empty-state i {
+            font-size: 2.5rem;
+            color: #AAB4BA;
+            margin-bottom: 12px;
+        }
+
+        .empty-state h6 {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .empty-state p {
+            color: var(--muted);
+            font-size: .82rem;
+        }
+
+
+        /* =====================================================
+           MODAL
+        ===================================================== */
+
+        .modal-content {
+            border: 0;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            padding: 20px 22px;
+
+            background: #FAFBFB;
+
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-body {
+            padding: 22px;
+        }
+
+        .modal-footer {
+            padding: 15px 22px;
+
+            border-top: 1px solid var(--border);
+        }
+
+        .form-label {
+            font-size: .78rem;
+            font-weight: 650;
+            color: var(--primary);
+        }
+
+        .form-control,
+        .form-select {
+            border-color: #D9E0E4;
+            border-radius: 8px;
+
+            padding: 10px 12px;
+
+            font-size: .85rem;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: var(--accent);
+
+            box-shadow:
+                0 0 0 .2rem rgba(24,118,102,.12);
+        }
+
+
+        /* =====================================================
+           HIGH CONTRAST MODE
+        ===================================================== */
+
+        body.high-contrast {
+            background: #000 !important;
+            color: #fff !important;
+        }
+
+        body.high-contrast .sidebar,
+        body.high-contrast .topbar,
+        body.high-contrast .stat-card,
+        body.high-contrast .main-card,
+        body.high-contrast .setting-item,
+        body.high-contrast .modal-content {
+            background: #111 !important;
+            color: #fff !important;
+            border-color: #FFFF00 !important;
+        }
+
+        body.high-contrast .page-title,
+        body.high-contrast .section-title,
+        body.high-contrast .contact-name,
+        body.high-contrast .stat-value,
+        body.high-contrast .setting-title {
+            color: #fff !important;
+        }
+
+        body.high-contrast .text-muted,
+        body.high-contrast .page-subtitle,
+        body.high-contrast .email-text,
+        body.high-contrast .setting-description {
+            color: #fff !important;
+        }
+
+        body.high-contrast .contacts-table thead th,
+        body.high-contrast .setting-item {
+            background: #171717 !important;
+        }
+
+        body.high-contrast .contacts-table td,
+        body.high-contrast .contacts-table th {
+            border-color: #555 !important;
+        }
+
+        body.high-contrast .form-control,
+        body.high-contrast .form-select,
+        body.high-contrast .search-box input,
+        body.high-contrast .search-box .input-group-text {
+            background: #000 !important;
+            color: #fff !important;
+            border-color: #FFFF00 !important;
+        }
+
+        body.high-contrast .btn-primary-custom {
+            background: #FFFF00 !important;
+            color: #000 !important;
+        }
+
+        body.high-contrast .custom-tabs {
+            background: #222;
+        }
+
+        body.high-contrast .custom-tabs .nav-link {
+            color: #fff;
+        }
+
+        body.high-contrast .custom-tabs .nav-link.active {
+            background: #FFFF00;
+            color: #000;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 991px) {
+
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .main-wrapper {
+                margin-left: 0;
+            }
+
+            .mobile-menu {
+                display: inline-flex;
+
+                width: 40px;
+                height: 40px;
+
+                align-items: center;
+                justify-content: center;
+
+                border: 1px solid var(--border);
+
+                background: #fff;
+
+                border-radius: 8px;
+
+                color: var(--primary);
+            }
+
+            .topbar {
+                padding: 0 18px;
+            }
+
+            .page-content {
+                padding: 20px 16px;
+            }
+        }
+
+        @media (max-width: 767px) {
+
+            .page-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .custom-tabs {
+                width: 100%;
+            }
+
+            .custom-tabs .nav-link {
+                flex: 1;
+                padding: 9px 8px;
+                font-size: .74rem;
+            }
+
+            .toolbar {
+                padding: 16px;
+            }
+
+            .search-box {
+                max-width: none;
+            }
+
+            .toolbar-actions {
+                width: 100%;
+                display: flex;
+            }
+
+            .toolbar-actions select,
+            .toolbar-actions button {
+                flex: 1;
+            }
+        }
+
+        @media (max-width: 480px) {
+
+            .page-title {
+                font-size: 1.4rem;
+            }
+
+            .topbar {
+                height: 65px;
+            }
+
+            .page-content {
+                padding: 16px 12px;
+            }
+
+            .card-header-custom {
+                padding: 18px;
+            }
+
+            .settings-grid {
+                padding: 16px;
+            }
+        }
+
+
+        /* =====================================================
+           REDUCED MOTION
+        ===================================================== */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                transition: none !important;
+                animation: none !important;
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+    <!-- Skip Navigation -->
+    <a
+        href="#main-content"
+        class="skip-link"
+    >
+        Skip to main content
+    </a>
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ===================================================== -->
+
+    <aside
+        class="sidebar"
+        id="sidebar"
+        aria-label="Main navigation"
+    >
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                <i class="fa-solid fa-ticket"></i>
+            </div>
+
+            <span class="brand-name">
+                TicketHub
+            </span>
+
+        </div>
+
+
+        <div class="sidebar-section">
+            Workspace
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <a href="#">
+                <i class="fa-solid fa-chart-line"></i>
+                Dashboard
+            </a>
+
+            <a href="#">
+                <i class="fa-solid fa-ticket"></i>
+                Tickets
+            </a>
+
+            <a href="#">
+                <i class="fa-solid fa-folder"></i>
+                Projects
+            </a>
+
+            <a href="#">
+                <i class="fa-solid fa-users"></i>
+                Team
+            </a>
+
+            <a href="#">
+                <i class="fa-solid fa-chart-column"></i>
+                Reports
+            </a>
+
+            <a href="#">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                Activity
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-section">
+            Administration
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <a href="#" class="active" aria-current="page">
+                <i class="fa-solid fa-user-shield"></i>
+                Contact Roles
+            </a>
+
+            <a href="#">
+                <i class="fa-solid fa-gear"></i>
+                Settings
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <div class="user-mini">
+
+                <div class="user-avatar">
+                    SJ
+                </div>
+
+                <div>
+                    <div class="fw-bold small">
+                        Sarah Jenkins
+                    </div>
+
+                    <div
+                        class="text-muted"
+                        style="font-size:.7rem;"
+                    >
+                        Administrator
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =====================================================
+         MAIN WRAPPER
+    ===================================================== -->
+
+    <div class="main-wrapper">
+
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <div class="d-flex align-items-center gap-3">
+
+                <button
+                    class="mobile-menu"
+                    id="mobileMenu"
+                    type="button"
+                    aria-label="Open navigation menu"
+                    aria-controls="sidebar"
+                    aria-expanded="false"
+                >
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+
+                <div class="d-none d-md-block">
+
+                    <div
+                        class="small fw-semibold"
+                        style="color:var(--primary);"
+                    >
+                        Administration
+                    </div>
+
+                    <div
+                        class="text-muted"
+                        style="font-size:.72rem;"
+                    >
+                        Manage workspace access
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="d-flex align-items-center gap-3">
+
+                <button
+                    class="btn btn-light rounded-circle"
+                    type="button"
+                    title="Notifications"
+                    aria-label="View notifications"
+                >
+                    <i class="fa-regular fa-bell"></i>
+                </button>
+
+                <div
+                    class="user-avatar"
+                    aria-label="Current user: Sarah Jenkins"
+                >
+                    SJ
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- =====================================================
+             CONTENT
+        ===================================================== -->
+
+        <main
+            class="page-content"
+            id="main-content"
+            tabindex="-1"
+        >
+
+
+            <!-- PAGE HEADER -->
+
+            <section class="page-header">
+
+                <div>
+
+                    <div class="breadcrumb-text">
+                        Administration / Contact Roles
+                    </div>
+
+                    <h1 class="page-title">
+                        Contact Roles & Accessibility
+                    </h1>
+
+                    <p class="page-subtitle">
+                        Manage user roles, permissions, and accessibility
+                        preferences across TicketHub.
+                    </p>
+
+                </div>
+
+
+                <div class="custom-tabs">
+
+                    <button
+                        class="nav-link active"
+                        id="roles-tab"
+                        type="button"
+                        onclick="showTab('roles')"
+                        aria-selected="true"
+                    >
+                        <i
+                            class="fa-solid fa-users-gear me-2"
+                            aria-hidden="true"
+                        ></i>
+
+                        Contact Roles
+                    </button>
+
+                    <button
+                        class="nav-link"
+                        id="accessibility-tab"
+                        type="button"
+                        onclick="showTab('accessibility')"
+                        aria-selected="false"
+                    >
+                        <i
+                            class="fa-solid fa-universal-access me-2"
+                            aria-hidden="true"
+                        ></i>
+
+                        Accessibility
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 STATISTICS
+            ================================================= -->
+
+            <section
+                class="row g-3 mb-4"
+                aria-label="Contact statistics"
+            >
+
+                <div class="col-sm-6 col-xl-3">
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+
+                        <div class="stat-label">
+                            Total Contacts
+                        </div>
+
+                        <div
+                            class="stat-value"
+                            id="totalContactCount"
+                        >
+                            4
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-sm-6 col-xl-3">
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-user-shield"></i>
+                        </div>
+
+                        <div class="stat-label">
+                            Administrators
+                        </div>
+
+                        <div
+                            class="stat-value"
+                            id="adminCount"
+                        >
+                            1
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-sm-6 col-xl-3">
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-headset"></i>
+                        </div>
+
+                        <div class="stat-label">
+                            Support Agents
+                        </div>
+
+                        <div
+                            class="stat-value"
+                            id="agentCount"
+                        >
+                            1
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-sm-6 col-xl-3">
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-universal-access"></i>
+                        </div>
+
+                        <div class="stat-label">
+                            Accessibility
+                        </div>
+
+                        <div
+                            class="stat-value"
+                            id="a11yStatusText"
+                            style="font-size:1rem;"
+                        >
+                            Standard
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 MAIN CARD
+            ================================================= -->
+
+            <section class="main-card">
+
+
+                <!-- CONTACT ROLES TAB -->
+
+                <div id="rolesPanel">
+
+                    <div class="card-header-custom">
+
+                        <div>
+
+                            <h2 class="section-title">
+                                Contact Roles
+                            </h2>
+
+                            <p class="section-description">
+                                Control who can access and manage
+                                TicketHub resources.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- TOOLBAR -->
+
+                    <div class="toolbar">
+
+                        <div class="search-box">
+
+                            <div class="input-group">
+
+                                <span
+                                    class="input-group-text"
+                                    aria-hidden="true"
+                                >
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                </span>
+
+                                <input
+                                    type="search"
+                                    id="searchInput"
+                                    class="form-control"
+                                    placeholder="Search name or email..."
+                                    aria-label="Search contacts by name or email"
+                                    oninput="filterContacts()"
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="toolbar-actions d-flex gap-2">
+
+                            <select
+                                class="form-select"
+                                id="roleFilter"
+                                onchange="filterContacts()"
+                                aria-label="Filter contacts by role"
+                            >
+
+                                <option value="ALL">
+                                    All Roles
+                                </option>
+
+                                <option value="Admin">
+                                    Admin
+                                </option>
+
+                                <option value="Support Agent">
+                                    Support Agent
+                                </option>
+
+                                <option value="Primary Contact">
+                                    Primary Contact
+                                </option>
+
+                            </select>
+
+
+                            <button
+                                type="button"
+                                class="btn btn-primary-custom text-nowrap"
+                                data-bs-toggle="modal"
+                                data-bs-target="#contactModal"
+                            >
+                                <i
+                                    class="fa-solid fa-user-plus me-2"
+                                    aria-hidden="true"
+                                ></i>
+
+                                Add Contact
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- TABLE -->
+
+                    <div class="table-container">
+
+                        <table
+                            class="table contacts-table mb-0"
+                            aria-label="Contact roles"
+                        >
+
+                            <thead>
+
+                                <tr>
+
+                                    <th scope="col">
+                                        Contact
+                                    </th>
+
+                                    <th scope="col">
+                                        Email
+                                    </th>
+
+                                    <th scope="col">
+                                        Role
+                                    </th>
+
+                                    <th scope="col">
+                                        Permissions
+                                    </th>
+
+                                    <th
+                                        scope="col"
+                                        class="text-end"
+                                    >
+                                        Actions
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody id="contactTableBody">
+
+                                <!-- Sarah -->
+
+                                <tr data-role="Admin">
+
+                                    <td>
+
+                                        <div class="contact-info">
+
+                                            <div class="avatar">
+                                                SJ
+                                            </div>
+
+                                            <div>
+
+                                                <div class="contact-name">
+                                                    Sarah Jenkins
+                                                </div>
+
+                                                <div class="contact-id">
+                                                    #USR-101
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+                                    <td class="email-text">
+                                        sarah.j@company.com
+                                    </td>
+
+                                    <td>
+                                        <span class="role-badge role-admin">
+                                            <i class="fa-solid fa-shield-halved"></i>
+                                            Admin
+                                        </span>
+                                    </td>
+
+                                    <td>
+
+                                        <span class="permission">
+                                            Full Access
+                                        </span>
+
+                                        <span class="permission">
+                                            Manage Users
+                                        </span>
+
+                                    </td>
+
+                                    <td class="text-end">
+
+                                        <button
+                                            class="action-btn me-1"
+                                            type="button"
+                                            onclick="editContact(this)"
+                                            aria-label="Edit Sarah Jenkins"
+                                            title="Edit contact"
+                                        >
+                                            <i class="fa-solid fa-pen"></i>
+                                        </button>
+
+                                        <button
+                                            class="action-btn delete"
+                                            type="button"
+                                            onclick="confirmDelete(this)"
+                                            aria-label="Delete Sarah Jenkins"
+                                            title="Delete contact"
+                                        >
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+
+                                    </td>
+
+                                </tr>
+
+
+                                <!-- Alex -->
+
+                                <tr data-role="Support Agent">
+
+                                    <td>
+
+                                        <div class="contact-info">
+
+                                            <div class="avatar">
+                                                AR
+                                            </div>
+
+                                            <div>
+
+                                                <div class="contact-name">
+                                                    Alex Rivera
+                                                </div>
+
+                                                <div class="contact-id">
+                                                    #USR-102
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+                                    <td class="email-text">
+                                        a.rivera@partner.org
+                                    </td>
+
+                                    <td>
+
+                                        <span class="role-badge role-agent">
+                                            <i class="fa-solid fa-headset"></i>
+                                            Support Agent
+                                        </span>
+
+                                    </td>
+
+                                    <td>
+
+                                        <span class="permission">
+                                            View Tickets
+                                        </span>
+
+                                        <span class="permission">
+                                            Update Status
+                                        </span>
+
+                                    </td>
+
+                                    <td class="text-end">
+
+                                        <button
+                                            class="action-btn me-1"
+                                            type="button"
+                                            onclick="editContact(this)"
+                                            aria-label="Edit Alex Rivera"
+                                        >
+                                            <i class="fa-solid fa-pen"></i>
+                                        </button>
+
+                                        <button
+                                            class="action-btn delete"
+                                            type="button"
+                                            onclick="confirmDelete(this)"
+                                            aria-label="Delete Alex Rivera"
+                                        >
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+
+                                    </td>
+
+                                </tr>
+
+
+                                <!-- Michael -->
+
+                                <tr data-role="Primary Contact">
+
+                                    <td>
+
+                                        <div class="contact-info">
+
+                                            <div class="avatar">
+                                                MC
+                                            </div>
+
+                                            <div>
+
+                                                <div class="contact-name">
+                                                    Michael Chen
+                                                </div>
+
+                                                <div class="contact-id">
+                                                    #USR-103
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+                                    <td class="email-text">
+                                        m.chen@client.com
+                                    </td>
+
+                                    <td>
+
+                                        <span class="role-badge role-contact">
+                                            <i class="fa-solid fa-user"></i>
+                                            Primary Contact
+                                        </span>
+
+                                    </td>
+
+                                    <td>
+
+                                        <span class="permission">
+                                            Read Only
+                                        </span>
+
+                                        <span class="permission">
+                                            Submit Tickets
+                                        </span>
+
+                                    </td>
+
+                                    <td class="text-end">
+
+                                        <button
+                                            class="action-btn me-1"
+                                            type="button"
+                                            onclick="editContact(this)"
+                                            aria-label="Edit Michael Chen"
+                                        >
+                                            <i class="fa-solid fa-pen"></i>
+                                        </button>
+
+                                        <button
+                                            class="action-btn delete"
+                                            type="button"
+                                            onclick="confirmDelete(this)"
+                                            aria-label="Delete Michael Chen"
+                                        >
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+
+                                    </td>
+
+                                </tr>
+
+
+                                <!-- Saira -->
+
+                                <tr data-role="Primary Contact">
+
+                                    <td>
+
+                                        <div class="contact-info">
+
+                                            <div class="avatar">
+                                                SA
+                                            </div>
+
+                                            <div>
+
+                                                <div class="contact-name">
+                                                    Saira Ahsan
+                                                </div>
+
+                                                <div class="contact-id">
+                                                    #USR-104
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+                                    <td class="email-text">
+                                        saira.ahsan@client.com
+                                    </td>
+
+                                    <td>
+
+                                        <span class="role-badge role-contact">
+                                            <i class="fa-solid fa-user"></i>
+                                            Primary Contact
+                                        </span>
+
+                                    </td>
+
+                                    <td>
+
+                                        <span class="permission">
+                                            Read Only
+                                        </span>
+
+                                    </td>
+
+                                    <td class="text-end">
+
+                                        <button
+                                            class="action-btn me-1"
+                                            type="button"
+                                            onclick="editContact(this)"
+                                            aria-label="Edit Saira Ahsan"
+                                        >
+                                            <i class="fa-solid fa-pen"></i>
+                                        </button>
+
+                                        <button
+                                            class="action-btn delete"
+                                            type="button"
+                                            onclick="confirmDelete(this)"
+                                            aria-label="Delete Saira Ahsan"
+                                        >
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+
+                        <!-- EMPTY SEARCH STATE -->
+
+                        <div
+                            class="empty-state"
+                            id="emptyState"
+                        >
+
+                            <i class="fa-solid fa-user-slash"></i>
+
+                            <h6>
+                                No contacts found
+                            </h6>
+
+                            <p>
+                                Try changing your search or role filter.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     ACCESSIBILITY PANEL
+                ================================================= -->
+
+                <div
+                    id="accessibilityPanel"
+                    style="display:none;"
+                >
+
+                    <div class="card-header-custom">
+
+                        <div>
+
+                            <h2 class="section-title">
+                                Accessibility Preferences
+                            </h2>
+
+                            <p class="section-description">
+                                Customize TicketHub for a more comfortable
+                                and accessible experience.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="settings-grid">
+
+                        <div class="row g-4">
+
+
+                            <!-- HIGH CONTRAST -->
+
+                            <div class="col-md-6">
+
+                                <div class="setting-item">
+
+                                    <div class="setting-icon">
+                                        <i class="fa-solid fa-circle-half-stroke"></i>
+                                    </div>
+
+                                    <div class="setting-title">
+                                        High Contrast Mode
+                                    </div>
+
+                                    <div class="setting-description">
+                                        Increases contrast between text,
+                                        backgrounds, buttons, and interface
+                                        elements for improved visibility.
+                                    </div>
+
+                                    <div
+                                        class="form-check form-switch mt-3"
+                                    >
+
+                                        <input
+                                            class="form-check-input"
+                                            type="checkbox"
+                                            role="switch"
+                                            id="highContrastSwitch"
+                                            onchange="toggleHighContrast(this)"
+                                        >
+
+                                        <label
+                                            class="form-check-label small"
+                                            for="highContrastSwitch"
+                                        >
+                                            Enable high contrast
+                                        </label>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- TEXT SIZE -->
+
+                            <div class="col-md-6">
+
+                                <div class="setting-item">
+
+                                    <div class="setting-icon">
+                                        <i class="fa-solid fa-text-height"></i>
+                                    </div>
+
+                                    <div class="setting-title">
+                                        Text Size
+                                    </div>
+
+                                    <div class="setting-description">
+                                        Increase or decrease the application
+                                        text size to improve readability.
+                                    </div>
+
+                                    <div
+                                        class="font-controls"
+                                        role="group"
+                                        aria-label="Text size controls"
+                                    >
+
+                                        <button
+                                            class="btn btn-outline-custom btn-sm"
+                                            onclick="changeFontSize('small')"
+                                        >
+                                            Small
+                                        </button>
+
+                                        <button
+                                            class="btn btn-primary-custom btn-sm"
+                                            onclick="changeFontSize('normal')"
+                                            id="normalFontBtn"
+                                        >
+                                            Default
+                                        </button>
+
+                                        <button
+                                            class="btn btn-outline-custom btn-sm"
+                                            onclick="changeFontSize('large')"
+                                        >
+                                            Large
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- SCREEN READER -->
+
+                            <div class="col-md-6">
+
+                                <div class="setting-item">
+
+                                    <div class="setting-icon">
+                                        <i class="fa-solid fa-ear-listen"></i>
+                                    </div>
+
+                                    <div class="setting-title">
+                                        Screen Reader Support
+                                    </div>
+
+                                    <div class="setting-description">
+                                        TicketHub uses semantic landmarks,
+                                        accessible labels, and ARIA attributes
+                                        to support assistive technologies.
+                                    </div>
+
+                                    <div class="mt-3">
+
+                                        <span class="badge text-bg-success">
+                                            <i class="fa-solid fa-check me-1"></i>
+                                            Optimized
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- KEYBOARD -->
+
+                            <div class="col-md-6">
+
+                                <div class="setting-item">
+
+                                    <div class="setting-icon">
+                                        <i class="fa-solid fa-keyboard"></i>
+                                    </div>
+
+                                    <div class="setting-title">
+                                        Keyboard Navigation
+                                    </div>
+
+                                    <div class="setting-description">
+                                        Navigate buttons, forms, tabs, and
+                                        interactive controls using the keyboard.
+                                    </div>
+
+                                    <div class="mt-3">
+
+                                        <span class="badge text-bg-success">
+                                            <i class="fa-solid fa-check me-1"></i>
+                                            Enabled
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- REDUCED MOTION -->
+
+                            <div class="col-md-6">
+
+                                <div class="setting-item">
+
+                                    <div class="setting-icon">
+                                        <i class="fa-solid fa-person-walking"></i>
+                                    </div>
+
+                                    <div class="setting-title">
+                                        Reduced Motion
+                                    </div>
+
+                                    <div class="setting-description">
+                                        Reduce interface animations and
+                                        transitions for users who prefer less
+                                        motion.
+                                    </div>
+
+                                    <div class="form-check form-switch mt-3">
+
+                                        <input
+                                            class="form-check-input"
+                                            type="checkbox"
+                                            role="switch"
+                                            id="reducedMotionSwitch"
+                                            onchange="toggleReducedMotion(this)"
+                                        >
+
+                                        <label
+                                            class="form-check-label small"
+                                            for="reducedMotionSwitch"
+                                        >
+                                            Reduce animations
+                                        </label>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- RESET -->
+
+                            <div class="col-md-6">
+
+                                <div class="setting-item">
+
+                                    <div class="setting-icon">
+                                        <i class="fa-solid fa-rotate-left"></i>
+                                    </div>
+
+                                    <div class="setting-title">
+                                        Reset Preferences
+                                    </div>
+
+                                    <div class="setting-description">
+                                        Restore all accessibility preferences
+                                        to their default settings.
+                                    </div>
+
+                                    <button
+                                        type="button"
+                                        class="btn btn-outline-custom btn-sm mt-3"
+                                        onclick="resetAccessibility()"
+                                    >
+                                        <i class="fa-solid fa-rotate-left me-1"></i>
+                                        Reset Settings
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- =====================================================
+         ADD / EDIT CONTACT MODAL
+    ===================================================== -->
+
+    <div
+        class="modal fade"
+        id="contactModal"
+        tabindex="-1"
+        aria-labelledby="contactModalLabel"
+        aria-hidden="true"
+    >
+
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <div>
+
+                        <h2
+                            class="modal-title fs-5 fw-bold"
+                            id="contactModalLabel"
+                        >
+                            Add Contact
+                        </h2>
+
+                        <div
+                            class="text-muted small mt-1"
+                        >
+                            Create a contact and assign their TicketHub role.
+                        </div>
+
+                    </div>
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                    ></button>
+
+                </div>
+
+
+                <form id="contactForm">
+
+                    <div class="modal-body">
+
+                        <input
+                            type="hidden"
+                            id="editRowIndex"
+                        >
+
+                        <div class="mb-3">
+
+                            <label
+                                for="contactName"
+                                class="form-label"
+                            >
+                                Full Name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="contactName"
+                                class="form-control"
+                                placeholder="e.g. John Smith"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label
+                                for="contactEmail"
+                                class="form-label"
+                            >
+                                Email Address
+                            </label>
+
+                            <input
+                                type="email"
+                                id="contactEmail"
+                                class="form-control"
+                                placeholder="name@company.com"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label
+                                for="contactRole"
+                                class="form-label"
+                            >
+                                Assigned Role
+                            </label>
+
+                            <select
+                                id="contactRole"
+                                class="form-select"
+                            >
+
+                                <option value="Admin">
+                                    Admin
+                                </option>
+
+                                <option value="Support Agent">
+                                    Support Agent
+                                </option>
+
+                                <option
+                                    value="Primary Contact"
+                                    selected
+                                >
+                                    Primary Contact
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="modal-footer">
+
+                        <button
+                            type="button"
+                            class="btn btn-outline-custom"
+                            data-bs-dismiss="modal"
+                        >
+                            Cancel
+                        </button>
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary-custom"
+                        >
+                            <i class="fa-solid fa-check me-1"></i>
+                            Save Contact
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         DELETE MODAL
+    ===================================================== -->
+
+    <div
+        class="modal fade"
+        id="deleteModal"
+        tabindex="-1"
+        aria-labelledby="deleteModalLabel"
+        aria-hidden="true"
+    >
+
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+
+            <div class="modal-content">
+
+                <div class="modal-body text-center p-4">
+
+                    <div
+                        class="mx-auto mb-3 d-flex align-items-center justify-content-center"
+                        style="
+                            width:50px;
+                            height:50px;
+                            border-radius:50%;
+                            background:#FFF1F1;
+                            color:#D92D20;
+                        "
+                    >
+                        <i class="fa-solid fa-trash"></i>
+                    </div>
+
+                    <h5
+                        id="deleteModalLabel"
+                        class="fw-bold"
+                    >
+                        Delete Contact?
+                    </h5>
+
+                    <p
+                        class="text-muted small"
+                        id="deleteMessage"
+                    >
+                        This action cannot be undone.
+                    </p>
+
+                    <div class="d-flex gap-2 justify-content-center">
+
+                        <button
+                            type="button"
+                            class="btn btn-outline-custom"
+                            data-bs-dismiss="modal"
+                        >
+                            Cancel
+                        </button>
+
+                        <button
+                            type="button"
+                            class="btn btn-danger"
+                            id="confirmDeleteBtn"
+                        >
+                            Delete
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Bootstrap JS -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    ></script>
+
+
+    <script>
+
+        /* =====================================================
+           TAB SWITCHING
+        ===================================================== */
+
+        function showTab(tab) {
+
+            const rolesPanel =
+                document.getElementById("rolesPanel");
+
+            const accessibilityPanel =
+                document.getElementById("accessibilityPanel");
+
+            const rolesTab =
+                document.getElementById("roles-tab");
+
+            const accessibilityTab =
+                document.getElementById("accessibility-tab");
+
+
+            if (tab === "roles") {
+
+                rolesPanel.style.display = "block";
+                accessibilityPanel.style.display = "none";
+
+                rolesTab.classList.add("active");
+                accessibilityTab.classList.remove("active");
+
+                rolesTab.setAttribute("aria-selected", "true");
+                accessibilityTab.setAttribute("aria-selected", "false");
+
+            } else {
+
+                rolesPanel.style.display = "none";
+                accessibilityPanel.style.display = "block";
+
+                rolesTab.classList.remove("active");
+                accessibilityTab.classList.add("active");
+
+                rolesTab.setAttribute("aria-selected", "false");
+                accessibilityTab.setAttribute("aria-selected", "true");
+
+            }
+
+        }
+
+
+        /* =====================================================
+           SEARCH + FILTER
+        ===================================================== */
+
+        function filterContacts() {
+
+            const search =
+                document
+                    .getElementById("searchInput")
+                    .value
+                    .toLowerCase()
+                    .trim();
+
+            const role =
+                document.getElementById("roleFilter").value;
+
+            const rows =
+                document.querySelectorAll(
+                    "#contactTableBody tr"
+                );
+
+            let visibleRows = 0;
+
+
+            rows.forEach(row => {
+
+                const rowText =
+                    row.innerText.toLowerCase();
+
+                const rowRole =
+                    row.getAttribute("data-role");
+
+                const searchMatch =
+                    rowText.includes(search);
+
+                const roleMatch =
+                    role === "ALL" ||
+                    rowRole === role;
+
+
+                if (searchMatch && roleMatch) {
+
+                    row.style.display = "";
+                    visibleRows++;
+
+                } else {
+
+                    row.style.display = "none";
+
+                }
+
+            });
+
+
+            document.getElementById("emptyState").style.display =
+                visibleRows === 0 ? "block" : "none";
+
+        }
+
+
+        /* =====================================================
+           CONTACT MODAL
+        ===================================================== */
+
+        const contactModalElement =
+            document.getElementById("contactModal");
+
+        const contactModal =
+            bootstrap.Modal.getOrCreateInstance(
+                contactModalElement
+            );
+
+
+        document
+            .getElementById("contactForm")
+            .addEventListener("submit", function(event) {
+
+                event.preventDefault();
+
+                const name =
+                    document
+                        .getElementById("contactName")
+                        .value
+                        .trim();
+
+                const email =
+                    document
+                        .getElementById("contactEmail")
+                        .value
+                        .trim();
+
+                const role =
+                    document
+                        .getElementById("contactRole")
+                        .value;
+
+
+                if (!name || !email) {
+                    return;
+                }
+
+
+                const editIndex =
+                    document.getElementById("editRowIndex").value;
+
+                const initials =
+                    name
+                        .split(" ")
+                        .filter(Boolean)
+                        .map(word => word[0])
+                        .join("")
+                        .toUpperCase()
+                        .substring(0, 2);
+
+
+                let roleClass =
+                    "role-contact";
+
+                let icon =
+                    "fa-user";
+
+                let permissions =
+                    `<span class="permission">Read Only</span>`;
+
+
+                if (role === "Admin") {
+
+                    roleClass = "role-admin";
+                    icon = "fa-shield-halved";
+
+                    permissions =
+                        `
+                        <span class="permission">
+                            Full Access
+                        </span>
+
+                        <span class="permission">
+                            Manage Users
+                        </span>
+                        `;
+
+                } else if (role === "Support Agent") {
+
+                    roleClass = "role-agent";
+                    icon = "fa-headset";
+
+                    permissions =
+                        `
+                        <span class="permission">
+                            View Tickets
+                        </span>
+
+                        <span class="permission">
+                            Update Status
+                        </span>
+                        `;
+
+                }
+
+
+                const tbody =
+                    document.getElementById(
+                        "contactTableBody"
+                    );
+
+
+                if (editIndex !== "") {
+
+                    const row =
+                        tbody.rows[Number(editIndex)];
+
+                    updateRow(
+                        row,
+                        name,
+                        email,
+                        role,
+                        roleClass,
+                        icon,
+                        permissions,
+                        initials
+                    );
+
+                } else {
+
+                    const newRow =
+                        document.createElement("tr");
+
+                    newRow.setAttribute(
+                        "data-role",
+                        role
+                    );
+
+
+                    const id =
+                        "#USR-" +
+                        Math.floor(
+                            100 +
+                            Math.random() * 900
+                        );
+
+
+                    newRow.innerHTML = createRowHTML(
+                        name,
+                        email,
+                        role,
+                        roleClass,
+                        icon,
+                        permissions,
+                        initials,
+                        id
+                    );
+
+
+                    tbody.appendChild(newRow);
+
+                }
+
+
+                updateStatistics();
+
+                this.reset();
+
+                document.getElementById(
+                    "editRowIndex"
+                ).value = "";
+
+                document.getElementById(
+                    "contactModalLabel"
+                ).innerText = "Add Contact";
+
+                contactModal.hide();
+
+                filterContacts();
+
+            });
+
+
+        /* =====================================================
+           CREATE ROW
+        ===================================================== */
+
+        function createRowHTML(
+            name,
+            email,
+            role,
+            roleClass,
+            icon,
+            permissions,
+            initials,
+            id
+        ) {
+
+            return `
+
+                <td>
+
+                    <div class="contact-info">
+
+                        <div class="avatar">
+                            ${initials}
+                        </div>
+
+                        <div>
+
+                            <div class="contact-name">
+                                ${escapeHTML(name)}
+                            </div>
+
+                            <div class="contact-id">
+                                ${id}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </td>
+
+
+                <td class="email-text">
+                    ${escapeHTML(email)}
+                </td>
+
+
+                <td>
+
+                    <span class="role-badge ${roleClass}">
+
+                        <i class="fa-solid ${icon}"></i>
+
+                        ${role}
+
+                    </span>
+
+                </td>
+
+
+                <td>
+                    ${permissions}
+                </td>
+
+
+                <td class="text-end">
+
+                    <button
+                        class="action-btn me-1"
+                        type="button"
+                        onclick="editContact(this)"
+                        aria-label="Edit ${escapeHTML(name)}"
+                    >
+
+                        <i class="fa-solid fa-pen"></i>
+
+                    </button>
+
+
+                    <button
+                        class="action-btn delete"
+                        type="button"
+                        onclick="confirmDelete(this)"
+                        aria-label="Delete ${escapeHTML(name)}"
+                    >
+
+                        <i class="fa-solid fa-trash"></i>
+
+                    </button>
+
+                </td>
+
+            `;
+
+        }
+
+
+        /* =====================================================
+           EDIT CONTACT
+        ===================================================== */
+
+        function editContact(button) {
+
+            const row =
+                button.closest("tr");
+
+            const cells =
+                row.children;
+
+            const name =
+                cells[0]
+                    .querySelector(".contact-name")
+                    .innerText;
+
+            const email =
+                cells[1].innerText.trim();
+
+            const role =
+                row.getAttribute("data-role");
+
+
+            document.getElementById(
+                "contactName"
+            ).value = name;
+
+            document.getElementById(
+                "contactEmail"
+            ).value = email;
+
+            document.getElementById(
+                "contactRole"
+            ).value = role;
+
+
+            const rows =
+                Array.from(
+                    document.querySelectorAll(
+                        "#contactTableBody tr"
+                    )
+                );
+
+            const index =
+                rows.indexOf(row);
+
+
+            document.getElementById(
+                "editRowIndex"
+            ).value = index;
+
+
+            document.getElementById(
+                "contactModalLabel"
+            ).innerText = "Edit Contact";
+
+
+            contactModal.show();
+
+        }
+
+
+        /* =====================================================
+           UPDATE ROW
+        ===================================================== */
+
+        function updateRow(
+            row,
+            name,
+            email,
+            role,
+            roleClass,
+            icon,
+            permissions,
+            initials
+        ) {
+
+            const id =
+                row.querySelector(".contact-id").innerText;
+
+            row.setAttribute(
+                "data-role",
+                role
+            );
+
+
+            row.innerHTML =
+                createRowHTML(
+                    name,
+                    email,
+                    role,
+                    roleClass,
+                    icon,
+                    permissions,
+                    initials,
+                    id
+                );
+
+        }
+
+
+        /* =====================================================
+           DELETE CONTACT
+        ===================================================== */
+
+        let rowToDelete = null;
+
+        const deleteModal =
+            bootstrap.Modal.getOrCreateInstance(
+                document.getElementById("deleteModal")
+            );
+
+
+        function confirmDelete(button) {
+
+            rowToDelete =
+                button.closest("tr");
+
+
+            const name =
+                rowToDelete
+                    .querySelector(".contact-name")
+                    .innerText;
+
+
+            document.getElementById(
+                "deleteMessage"
+            ).innerText =
+                `Are you sure you want to delete ${name}?`;
+
+
+            deleteModal.show();
+
+        }
+
+
+        document
+            .getElementById("confirmDeleteBtn")
+            .addEventListener("click", function() {
+
+                if (rowToDelete) {
+
+                    rowToDelete.remove();
+
+                    rowToDelete = null;
+
+                    updateStatistics();
+
+                    filterContacts();
+
+                }
+
+                deleteModal.hide();
+
+            });
+
+
+        /* =====================================================
+           STATISTICS
+        ===================================================== */
+
+        function updateStatistics() {
+
+            const rows =
+                document.querySelectorAll(
+                    "#contactTableBody tr"
+                );
+
+
+            let admins = 0;
+            let agents = 0;
+
+
+            rows.forEach(row => {
+
+                const role =
+                    row.getAttribute("data-role");
+
+
+                if (role === "Admin") {
+                    admins++;
+                }
+
+                if (role === "Support Agent") {
+                    agents++;
+                }
+
+            });
+
+
+            document.getElementById(
+                "totalContactCount"
+            ).innerText = rows.length;
+
+
+            document.getElementById(
+                "adminCount"
+            ).innerText = admins;
+
+
+            document.getElementById(
+                "agentCount"
+            ).innerText = agents;
+
+        }
+
+
+        /* =====================================================
+           HIGH CONTRAST
+        ===================================================== */
+
+        function toggleHighContrast(toggle) {
+
+            document.body.classList.toggle(
+                "high-contrast",
+                toggle.checked
+            );
+
+
+            localStorage.setItem(
+                "highContrast",
+                toggle.checked
+            );
+
+
+            updateAccessibilityStatus();
+
+        }
+
+
+        /* =====================================================
+           FONT SIZE
+        ===================================================== */
+
+        function changeFontSize(size) {
+
+            const root =
+                document.documentElement;
+
+
+            let fontSize = "16px";
+
+
+            if (size === "small") {
+                fontSize = "14px";
+            }
+
+            if (size === "large") {
+                fontSize = "18px";
+            }
+
+
+            root.style.setProperty(
+                "--base-font-size",
+                fontSize
+            );
+
+
+            localStorage.setItem(
+                "fontSize",
+                size
+            );
+
+        }
+
+
+        /* =====================================================
+           REDUCED MOTION
+        ===================================================== */
+
+        function toggleReducedMotion(toggle) {
+
+            document.body.classList.toggle(
+                "reduced-motion",
+                toggle.checked
+            );
+
+
+            localStorage.setItem(
+                "reducedMotion",
+                toggle.checked
+            );
+
+        }
+
+
+        /* =====================================================
+           RESET ACCESSIBILITY
+        ===================================================== */
+
+        function resetAccessibility() {
+
+            localStorage.removeItem("highContrast");
+            localStorage.removeItem("fontSize");
+            localStorage.removeItem("reducedMotion");
+
+
+            document.body.classList.remove(
+                "high-contrast"
+            );
+
+            document.body.classList.remove(
+                "reduced-motion"
+            );
+
+
+            document.documentElement.style.setProperty(
+                "--base-font-size",
+                "16px"
+            );
+
+
+            document.getElementById(
+                "highContrastSwitch"
+            ).checked = false;
+
+
+            document.getElementById(
+                "reducedMotionSwitch"
+            ).checked = false;
+
+
+            updateAccessibilityStatus();
+
+        }
+
+
+        /* =====================================================
+           ACCESSIBILITY STATUS
+        ===================================================== */
+
+        function updateAccessibilityStatus() {
+
+            const highContrast =
+                document.getElementById(
+                    "highContrastSwitch"
+                ).checked;
+
+
+            const reducedMotion =
+                document.getElementById(
+                    "reducedMotionSwitch"
+                ).checked;
+
+
+            let status = "Standard";
+
+
+            if (highContrast) {
+                status = "High Contrast";
+            } else if (reducedMotion) {
+                status = "Reduced Motion";
+            }
+
+
+            document.getElementById(
+                "a11yStatusText"
+            ).innerText = status;
+
+        }
+
+
+        /* =====================================================
+           LOAD SAVED SETTINGS
+        ===================================================== */
+
+        function loadAccessibilitySettings() {
+
+            const highContrast =
+                localStorage.getItem(
+                    "highContrast"
+                ) === "true";
+
+
+            const reducedMotion =
+                localStorage.getItem(
+                    "reducedMotion"
+                ) === "true";
+
+
+            const fontSize =
+                localStorage.getItem(
+                    "fontSize"
+                ) || "normal";
+
+
+            document.getElementById(
+                "highContrastSwitch"
+            ).checked = highContrast;
+
+
+            document.getElementById(
+                "reducedMotionSwitch"
+            ).checked = reducedMotion;
+
+
+            document.body.classList.toggle(
+                "high-contrast",
+                highContrast
+            );
+
+
+            document.body.classList.toggle(
+                "reduced-motion",
+                reducedMotion
+            );
+
+
+            changeFontSize(fontSize);
+
+            updateAccessibilityStatus();
+
+        }
+
+
+        /* =====================================================
+           MOBILE SIDEBAR
+        ===================================================== */
+
+        document
+            .getElementById("mobileMenu")
+            .addEventListener("click", function() {
+
+                const sidebar =
+                    document.getElementById(
+                        "sidebar"
+                    );
+
+                const visible =
+                    sidebar.classList.toggle(
+                        "show"
+                    );
+
+
+                this.setAttribute(
+                    "aria-expanded",
+                    visible
+                );
+
+            });
+
+
+        /* =====================================================
+           SECURITY HELPER
+        ===================================================== */
+
+        function escapeHTML(value) {
+
+            return value
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+
+        }
+
+
+        /* =====================================================
+           INITIALIZE
+        ===================================================== */
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function() {
+
+                updateStatistics();
+
+                loadAccessibilitySettings();
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>
+```
